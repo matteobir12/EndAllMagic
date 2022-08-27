@@ -1,0 +1,81 @@
+package net.fabricmc.integration;
+
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.fabricmc.endallmagic.EndAllMagic;
+
+@Config(name = EndAllMagic.MOD_ID)
+public class EndAllMagicConfig implements ConfigData {
+
+	@Comment("The colour of objects created by spells (i.e. the laser" +
+			"\n    from Solar Strike and the wall from Arcane Wall).")
+	public String magicColour = Integer.toString(0x7ecdfb, 16);
+
+	@Comment("The time Mana takes to refill by 1 in ticks before modifiers.")
+	public int baseManaCooldown = 20;
+
+	@Comment("The time Burnout takes to reduce by 1 in ticks before modifiers.")
+	public int baseBurnoutCooldown = 60;
+
+	@Comment("Spells that should be enabled. (Restart Required)")
+	@ConfigEntry.Gui.CollapsibleObject
+	public SpellStuff spells = new SpellStuff();
+
+	public static class SpellStuff {
+		@Comment("Should Lunge be enabled? (Restart Required)")
+		public boolean enableLunge = true;
+
+		@Comment("Should Dream Warp be enabled? (Restart Required)")
+		public boolean enableDreamWarp = true;
+
+		@Comment("Should Magic Missile be enabled? (Restart Required)")
+		public boolean enableMagicMissile = true;
+
+		@Comment("Should Telekinetic Shock be enabled? (Restart Required)")
+		public boolean enableTelekineticShock = true;
+
+		@Comment("Should Heal be enabled? (Restart Required)")
+		public boolean enableHeal = true;
+
+		@Comment("Should Discombobulate be enabled? (Restart Required)")
+		public boolean enableDiscombobulate = true;
+
+		@Comment("Should Solar Strike be enabled? (Restart Required)")
+		public boolean enableSolarStrike = true;
+
+		@Comment("Should Arcane Barrier be enabled? (Restart Required)")
+		public boolean enableArcaneBarrier = true;
+
+		@Comment("The Mana costs for all the spells.")
+		@ConfigEntry.Gui.CollapsibleObject
+		public ManaCosts manaCosts = new ManaCosts();
+	}
+
+	public static class ManaCosts {
+		@Comment("The Mana cost for the Lunge spell.")
+		public int lungeCastingCost = 5;
+
+		@Comment("The Mana cost for the Dream Warp spell.")
+		public int dreamWarpCastingCost = 15;
+
+		@Comment("The Mana cost for the Magic Missile spell.")
+		public int magicMissileCastingCost = 3;
+
+		@Comment("The Mana cost for the Telekinetic Shock spell.")
+		public int telekinesisCastingCost = 4;
+
+		@Comment("The Mana cost for the Heal spell.")
+		public int healCastingCost = 10;
+
+		@Comment("The Mana cost for the Discombobulate spell.")
+		public int discombobulateCastingCost = 10;
+
+		@Comment("The Mana cost for the Solar Strike spell.")
+		public int solarStrikeCastingCost = 20;
+
+		@Comment("The Mana cost for the Arcane Barrier spell.")
+		public int arcaneBarrierCastingCost = 4;
+	}
+}
