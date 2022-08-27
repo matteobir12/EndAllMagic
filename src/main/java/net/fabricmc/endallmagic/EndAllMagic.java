@@ -1,0 +1,26 @@
+package net.fabricmc.endallmagic;
+
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.endallmagic.items.Staff;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class EndAllMagic implements ModInitializer {
+	// custom reg public static final Registry<Spell> SPELL = createRegistry("spell", Spell.class);
+
+	public static final String MOD_ID = "endallmagic";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Staff STAFF = new Staff(new FabricItemSettings().group(ItemGroup.MISC));
+	@Override
+	public void onInitialize() {
+		Registry.register(Registry.ITEM, new Identifier(MOD_ID, "staff"), STAFF);
+		// This code runs as soon as Minecraft is in a mod-load-ready state.
+		// However, some things (like resources) may still be uninitialized.
+		// Proceed with mild caution.
+	}
+}

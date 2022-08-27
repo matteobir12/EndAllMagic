@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "endallmagic",
   "version": "${version}",
 
-  "name": "Example Mod",
+  "name": "End All Magic",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Me!"
+    "Matteobir12"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -14,16 +14,16 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/endallmagic/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.fabricmc.endallmagic.EndAllMagic"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "endallmagic.mixins.json"
   ],
 
   "depends": {
