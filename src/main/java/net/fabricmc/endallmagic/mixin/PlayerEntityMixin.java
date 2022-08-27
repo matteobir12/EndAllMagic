@@ -132,13 +132,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	}
 
 	@Override
-	public void setKnownSpell(Identifier spellId) {
-		Spell spell = Arcanus.SPELL.get(spellId);
-
-		if(!knownSpells.contains(spell))
-			knownSpells.add(spell);
-		else if(spell != null)
-			Arcanus.LOGGER.warn("Spell " + spell.getTranslationKey() + " is already known!");
+	public void setKnownSpell(Spell spell) {
+		knownSpells.addSpell(spell);
 	}
 
 	@Override
