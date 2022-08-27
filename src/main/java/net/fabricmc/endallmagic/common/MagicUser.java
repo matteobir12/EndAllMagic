@@ -25,14 +25,6 @@ public interface MagicUser {
 
 	void addMana(int amount);
 
-	int getBurnout();
-
-	int getMaxBurnout();
-
-	void setBurnout(int amount);
-
-	void addBurnout(int amount);
-
 	boolean isManaVisible();
 
 	void shouldShowMana(boolean shouldShowMana);

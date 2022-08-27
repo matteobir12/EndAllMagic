@@ -13,11 +13,11 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.fabricmc.endallmagic.common.Pattern;
 import net.fabricmc.endallmagic.common.spells.Spell;
-import net.fabricmc.endallmagic.common.spells.Spells;
 
 
 public class ClientMixin  {
-    
+    // their known spells?
+
 	@Unique private int timer = 0;
 	@Unique private final java.util.List<Pattern> pattern = new java.util.ArrayList<>(3);
 	@Shadow	@Nullable public ClientPlayerEntity player;
@@ -37,9 +37,9 @@ public class ClientMixin  {
 				player.sendMessage((Text.literal(pattern.get(0).toString()).formatted(Formatting.GRAY)).append(hyphen).append((Text.literal(pattern.get(1).toString()).formatted(Formatting.GRAY))).append(hyphen).append((Text.literal(pattern.get(2).toString()).formatted(Formatting.GRAY))), true);
 
 				if(pattern.size() > 3) {
-					Spell cast = Spells.lookupSpell(player, pattern);
+					Spell cast = player.knownSpells.lookupSpell(player, pattern);
 					if(cast != null) {
-							cast.attemptCast();
+							player;
 						}
 					
 
