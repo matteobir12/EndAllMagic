@@ -37,6 +37,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import static net.fabricmc.endallmagic.EndAllMagic.DataTrackers.*;
+import static net.fabricmc.endallmagic.EndAllMagic.EntityAttributes.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +53,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Unique private Spell activeSpell = null;
 	@Unique private long lastCastTime = 0;
 	@Unique private int spellTimer = 0;
-	@Unique private int maxMana = 20;
+	@Unique private int maxMana = 20; // might need to track?
 	@Unique private final List<Entity> hasHit = new ArrayList<>();
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -60,7 +62,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 
 	@Inject(method = "createPlayerAttributes", at = @At("RETURN"))
 	private static void createPlayerAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> info) {
-		info.getReturnValue().add(MANA_COST).add(MANA_REGEN).add(MANA_LOCK);
+		info.getReturnValue().add(MANA_COST).add(MANA_REGEN);
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
@@ -118,7 +120,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 
 	@Inject(method = "initDataTracker", at = @At("HEAD"))
 	public void initTracker(CallbackInfo info) {
-		dataTracker.startTracking(MANA, MAX_MANA);
+		dataTracker.startTracking(MANA, maxMana);
 		dataTracker.startTracking(SHOW_MANA, false);
 	}
 
