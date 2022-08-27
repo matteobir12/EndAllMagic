@@ -1,7 +1,9 @@
 package net.fabricmc.endallmagic;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.items.Staff;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
@@ -14,6 +16,9 @@ public class EndAllMagic implements ModInitializer {
 	// custom reg public static final Registry<Spell> SPELL = createRegistry("spell", Spell.class);
 
 	public static final String MOD_ID = "endallmagic";
+
+	public static final Registry<Spell> SPELL = FabricRegistryBuilder.createSimple(Spell.class, new Identifier(MOD_ID, "spell")).buildAndRegister();
+
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Staff STAFF = new Staff(new FabricItemSettings().group(ItemGroup.MISC));
 	@Override
