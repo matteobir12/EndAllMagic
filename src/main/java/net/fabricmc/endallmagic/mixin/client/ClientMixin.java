@@ -3,20 +3,22 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.client.MinecraftClient;
+import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.fabricmc.endallmagic.items.Staff;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.fabricmc.endallmagic.common.Pattern;
-import net.fabricmc.endallmagic.common.spells.Spell;
 
-
+@Mixin(MinecraftClient.class)
 public class ClientMixin  {
-    // their known spells?
 
 	@Unique private int timer = 0;
 	@Unique private final java.util.List<Pattern> pattern = new java.util.ArrayList<>(3);
@@ -37,16 +39,12 @@ public class ClientMixin  {
 				player.sendMessage((Text.literal(pattern.get(0).toString()).formatted(Formatting.GRAY)).append(hyphen).append((Text.literal(pattern.get(1).toString()).formatted(Formatting.GRAY))).append(hyphen).append((Text.literal(pattern.get(2).toString()).formatted(Formatting.GRAY))), true);
 
 				if(pattern.size() > 3) {
-					Spell cast = player.knownSpells.lookupSpell(player, pattern);
-					if(cast != null) {
-							player;
-						}
-					
+					// send to server to cast
 
 					timer = 0;
 				}
 			}
-			else if(pattern.size() < 3 && unfinishedSpell)
+			else if(pattern.size() < 3 && !pattern.isEmpty())
 				player.sendMessage(Text.literal(""), true);
 		}
 		else
@@ -58,9 +56,8 @@ public class ClientMixin  {
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doItemUse()V", ordinal = 0), cancellable = true)
 	public void onRightClick(CallbackInfo info) {
-		if(player != null && !player.isSpectator() && player.getMainHandStack().getItem() instanceof WandItem) {
+		if(player != null && !player.isSpectator() && player.getMainHandStack().getItem() instanceof Staff) {
 			timer = 20;
-			unfinishedSpell = true;
 			pattern.add(Pattern.RIGHT);
 			player.swingHand(Hand.MAIN_HAND);
 			player.world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1F, 1.1F);
@@ -70,9 +67,8 @@ public class ClientMixin  {
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z", ordinal = 0), cancellable = true)
 	public void onLeftClick(CallbackInfo info) {
-		if(player != null && !player.isSpectator() && player.getMainHandStack().getItem() instanceof WandItem) {
+		if(player != null && !player.isSpectator() && player.getMainHandStack().getItem() instanceof Staff) {
 			timer = 20;
-			unfinishedSpell = true;
 			pattern.add(Pattern.LEFT);
 			player.swingHand(Hand.MAIN_HAND);
 			player.world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1F, 1.3F);
@@ -80,19 +76,12 @@ public class ClientMixin  {
 		}
 	}
 
-	@Override
-	public List<Pattern> getPattern() {
+	public java.util.List<Pattern> getPattern() {
 		return pattern;
 	}
 
-	@Override
 	public void setTimer(int value) {
 		timer = value;
-	}
-
-	@Override
-	public void setUnfinishedSpell(boolean value) {
-		unfinishedSpell = value;
 	}
     
 }
