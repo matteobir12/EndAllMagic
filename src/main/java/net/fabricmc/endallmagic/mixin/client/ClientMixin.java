@@ -16,11 +16,14 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.fabricmc.endallmagic.EndAllMagic;
+import net.fabricmc.endallmagic.common.Networking;
 import net.fabricmc.endallmagic.common.Pattern;
+import net.fabricmc.endallmagic.common.spells.Spell;
+import net.fabricmc.endallmagic.common.spells.SpellTree;
 
 @Mixin(MinecraftClient.class)
 public class ClientMixin  {
-
+	@Unique private SpellTree knownSpells = new SpellTree();
 	@Unique private int timer = 0;
 	@Unique private final java.util.List<Pattern> pattern = new java.util.ArrayList<>(3);
 	@Shadow	@Nullable public ClientPlayerEntity player;
@@ -37,12 +40,22 @@ public class ClientMixin  {
 			if(timer > 0) {
 				MutableText hyphen = Text.literal("-").formatted(Formatting.GRAY);
 				MutableText text;
-				for (Pattern p: pattern ) text.append(p.toString()).formatted(Formatting.GRAY)).append(hyphen);
-				
+				for (Pattern p: pattern ) text.append(p.toString()).formatted(Formatting.GRAY).append(hyphen);
 				if (!pattern.isEmpty()) player.sendMessage(text, true);
 
 				if(pattern.size() > 3) {
-					// send to server to cast
+					oshi.util.tuples.Pair<Spell,Boolean> p = knownSpells.getSpell(pattern);
+					if(Boolean.TRUE.equals(p.getB())){
+						if(p.getA() !=null) {
+							Networking.send(EndAllMagic.SPELL.getRawId(p.getA()));
+						}
+						
+					}
+					else{
+						pattern.clear();
+						timer = 0;
+					}
+					
 
 					timer = 0;
 				}
