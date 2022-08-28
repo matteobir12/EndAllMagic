@@ -36,8 +36,10 @@ public class ClientMixin  {
 		if(player.getMainHandStack().getItem() instanceof Staff) {
 			if(timer > 0) {
 				MutableText hyphen = Text.literal("-").formatted(Formatting.GRAY);
-
-				player.sendMessage((Text.literal(pattern.get(0).toString()).formatted(Formatting.GRAY)).append(hyphen).append((Text.literal(pattern.get(1).toString()).formatted(Formatting.GRAY))).append(hyphen).append((Text.literal(pattern.get(2).toString()).formatted(Formatting.GRAY))), true);
+				MutableText text;
+				for (Pattern p: pattern ) text.append(p.toString()).formatted(Formatting.GRAY)).append(hyphen);
+				
+				if (!pattern.isEmpty()) player.sendMessage(text, true);
 
 				if(pattern.size() > 3) {
 					// send to server to cast
