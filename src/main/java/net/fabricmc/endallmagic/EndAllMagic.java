@@ -1,13 +1,17 @@
 package net.fabricmc.endallmagic;
 
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.endallmagic.common.Networking;
+import net.fabricmc.endallmagic.common.spells.FireBall;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.items.Staff;
+import net.fabricmc.endallmagic.mixin.client.ClientUtils;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.integration.EndAllMagicConfig;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.data.DataTracker;
@@ -20,6 +24,8 @@ import net.minecraft.util.registry.Registry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.minecraft.client.MinecraftClient;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -46,6 +52,10 @@ public class EndAllMagic implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
+		if (FabricLoader.getInstance().getEnvironmentType() ==  EnvType.CLIENT){
+			((ClientUtils) MinecraftClient.getInstance()).addSpell(new FireBall());
+		}
+			
 	}
 
 	public static class DataTrackers {
