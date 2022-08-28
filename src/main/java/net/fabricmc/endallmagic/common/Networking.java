@@ -5,6 +5,7 @@ import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -31,7 +32,7 @@ public class Networking {
 			Spell spell = EndAllMagic.SPELL.get(spellId);
 
 			if(user.getKnownSpells().getSpell(spell.pattern) != null) {
-				int realManaCost = (int) (spell.getManaCost()); // add some mana math here
+				int realManaCost = (spell.getManaCost()); // add some mana math here
 
 				if(player.isCreative() || (user.getCurrentMana() > 0) || (user.getCurrentMana() >= realManaCost)) {
 					player.sendMessage(Text.translatable(spell.getTranslationKey()).formatted(Formatting.GREEN), true);
