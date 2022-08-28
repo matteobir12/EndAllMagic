@@ -31,24 +31,23 @@ public class Networking {
 
 		server.execute(() -> {
 			MagicUser user = (MagicUser) player;
-			ItemStack stack = player.getMainHandStack();
-			Staff staff = (Staff) stack.getItem();
 			Spell spell = EndAllMagic.SPELL.get(spellId);
 
 			if(user.getKnownSpells().getSpell(spell.pattern) != null) {
-				int realManaCost = (int) (spell.getManaCost() * ArcanusHelper.getManaCost(player));
+				int realManaCost = (int) (spell.getManaCost()); // add some mana math here
 
 				if(player.isCreative() || (user.getCurrentMana() > 0) || (user.getCurrentMana() >= realManaCost)) {
 					player.sendMessage(Text.translatable(spell.getTranslationKey()).formatted(Formatting.GREEN), true);
-					spell.onCast(player.world, player);
+					user.setActiveSpell(spell, 0);
+					// spell.onCast(player.world, player);
 
 					if(!player.isCreative()) {
 						user.setLastCastTime(player.world.getTime());
 
 						if(user.getCurrentMana() < realManaCost) {
-							int burnoutAmount = realManaCost - user.getCurrentMana();
-							player.damage(ModDamageSource.MAGIC_BURNOUT, burnoutAmount);
-							player.sendMessage(Text.translatable("error." + EndAllMagic.MOD_ID + ".burnout").formatted(Formatting.RED), false);
+							// int burnoutAmount = realManaCost - user.getCurrentMana();
+							// player.damage(ModDamageSource.MAGIC_BURNOUT, burnoutAmount); // damage if over
+							EndAllMagic.LOGGER.info("not enough mana");
 						}
 
 						user.addMana(-realManaCost);
