@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 
 public class EndAllMagic implements ModInitializer {
@@ -30,14 +31,14 @@ public class EndAllMagic implements ModInitializer {
 	public static final String MOD_ID = "endallmagic";
 
 	public static final Registry<Spell> SPELL = FabricRegistryBuilder.createSimple(Spell.class, new Identifier(MOD_ID, "spell")).buildAndRegister();
-
+	public static ConfigHolder<EndAllMagicConfig> configHolder;
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Staff STAFF = new Staff(new FabricItemSettings().group(ItemGroup.MISC));
 	@Override
 	public void onInitialize() {
 		AutoConfig.register(EndAllMagicConfig.class, JanksonConfigSerializer::new);
 		Registry.register(Registry.ITEM, new Identifier(MOD_ID, "staff"), STAFF);
-
+		configHolder = AutoConfig.getConfigHolder(EndAllMagicConfig.class);
 		ServerPlayNetworking.registerGlobalReceiver(Networking.ID, Networking::handle);
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
@@ -56,6 +57,9 @@ public class EndAllMagic implements ModInitializer {
 		public static final EntityAttribute MANA_COST = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".mana_cost", 1D, 0D, 1024D).setTracked(true);
 		public static final EntityAttribute MANA_REGEN = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".mana_regen", 1D, 0D, 1024D).setTracked(true);
 		private EntityAttributes(){};
+	}
+	public static EndAllMagicConfig getConfig() {
+		return configHolder.getConfig();
 	}
 
 }
