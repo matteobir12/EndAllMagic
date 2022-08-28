@@ -39,7 +39,7 @@ public class ClientMixin  {
 		if(player.getMainHandStack().getItem() instanceof Staff) {
 			if(timer > 0) {
 				MutableText hyphen = Text.literal("-").formatted(Formatting.GRAY);
-				MutableText text;
+				MutableText text = Text.literal("");
 				for (Pattern p: pattern ) text.append(p.toString()).formatted(Formatting.GRAY).append(hyphen);
 				if (!pattern.isEmpty()) player.sendMessage(text, true);
 
@@ -49,7 +49,6 @@ public class ClientMixin  {
 						if(p.getA() !=null) {
 							Networking.send(EndAllMagic.SPELL.getRawId(p.getA()));
 						}
-						
 					}
 					else{
 						pattern.clear();
