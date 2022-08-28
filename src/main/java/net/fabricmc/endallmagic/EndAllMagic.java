@@ -2,11 +2,11 @@ package net.fabricmc.endallmagic;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.endallmagic.client.ClientUtils;
 import net.fabricmc.endallmagic.common.Networking;
 import net.fabricmc.endallmagic.common.spells.FireBall;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.items.Staff;
-import net.fabricmc.endallmagic.mixin.client.ClientUtils;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;

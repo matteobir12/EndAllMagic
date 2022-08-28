@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.mixin.client;
+package net.fabricmc.endallmagic.client;
 
 import net.fabricmc.endallmagic.common.spells.Spell;
 
