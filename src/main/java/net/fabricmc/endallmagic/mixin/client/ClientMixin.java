@@ -18,6 +18,7 @@ import net.minecraft.util.Hand;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.Networking;
 import net.fabricmc.endallmagic.common.Pattern;
+import net.fabricmc.endallmagic.common.spells.FireBall;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
 
@@ -27,6 +28,11 @@ public class ClientMixin  {
 	@Unique private int timer = 0;
 	@Unique private final java.util.List<Pattern> pattern = new java.util.ArrayList<>(3);
 	@Shadow	@Nullable public ClientPlayerEntity player;
+
+	@Inject(method = "MinecraftClient", at = @At("TAIL"))
+	public void MinecraftClient(net.minecraft.client.RunArgs args) {
+		knownSpells.addSpell(new FireBall());
+	}
 
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void tick(CallbackInfo info) {
