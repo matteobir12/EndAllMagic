@@ -15,6 +15,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.Pattern;
 
 @Mixin(MinecraftClient.class)
@@ -56,7 +57,9 @@ public class ClientMixin  {
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doItemUse()V", ordinal = 0), cancellable = true)
 	public void onRightClick(CallbackInfo info) {
+		EndAllMagic.LOGGER.info("right Clicking");
 		if(player != null && !player.isSpectator() && player.getMainHandStack().getItem() instanceof Staff) {
+			EndAllMagic.LOGGER.info("with staff");
 			timer = 20;
 			pattern.add(Pattern.RIGHT);
 			player.swingHand(Hand.MAIN_HAND);
@@ -67,7 +70,9 @@ public class ClientMixin  {
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z", ordinal = 0), cancellable = true)
 	public void onLeftClick(CallbackInfo info) {
+		EndAllMagic.LOGGER.info("left Clicking");
 		if(player != null && !player.isSpectator() && player.getMainHandStack().getItem() instanceof Staff) {
+			EndAllMagic.LOGGER.info("with staff");
 			timer = 20;
 			pattern.add(Pattern.LEFT);
 			player.swingHand(Hand.MAIN_HAND);
