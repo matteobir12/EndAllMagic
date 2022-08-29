@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.integration;
+package net.fabricmc.endallmagic.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;

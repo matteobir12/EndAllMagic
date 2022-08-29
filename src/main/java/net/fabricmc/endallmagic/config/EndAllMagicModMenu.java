@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.integration;
+package net.fabricmc.endallmagic.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
