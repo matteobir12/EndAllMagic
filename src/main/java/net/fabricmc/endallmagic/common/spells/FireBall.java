@@ -22,7 +22,7 @@ public class FireBall extends Spell {
         damage = 5;
 
     }
-    public FireBall(int damage, int manaCost){ 
+    public FireBall(int damage, int manaCost){
         // element
         pattern.addAll(SpellConfig.FIRE_PATTERN);
         // pattern
@@ -34,7 +34,8 @@ public class FireBall extends Spell {
     @Override
     public <T extends LivingEntity & MagicUser> void attemptCast(T entity, World world) {
         Vec3d rotation = entity.getRotationVec(1F);
-        FireballEntity fireBall = new FireballEntity(world, entity, rotation.x, rotation.y, 4.5F, damage);
+        rotation.normalize().multiply(4.5F);
+        FireballEntity fireBall = new FireballEntity(world, entity, rotation.x, rotation.y, rotation.z, damage);
 
         world.spawnEntity(fireBall);
         world.playSound(null, entity.getBlockPos(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 2F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
