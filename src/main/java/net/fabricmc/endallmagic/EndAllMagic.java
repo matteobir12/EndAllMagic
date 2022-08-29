@@ -5,7 +5,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.endallmagic.client.ClientUtils;
 import net.fabricmc.endallmagic.common.Networking;
 import net.fabricmc.endallmagic.common.spells.FireBall;
+import net.fabricmc.endallmagic.common.spells.HealSpell;
 import net.fabricmc.endallmagic.common.spells.Spell;
+import net.fabricmc.endallmagic.common.spells.Spells;
 import net.fabricmc.endallmagic.integration.EndAllMagicConfig;
 import net.fabricmc.endallmagic.items.Staff;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -46,6 +48,10 @@ public class EndAllMagic implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MOD_ID, "staff"), STAFF);
 		configHolder = AutoConfig.getConfigHolder(EndAllMagicConfig.class);
 		ServerPlayNetworking.registerGlobalReceiver(Networking.ID, Networking::handle);
+		Spells.register();
+		SPELL.forEach((spell)-> {
+			LOGGER.info("got a spell");
+		});
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
 
@@ -54,6 +60,7 @@ public class EndAllMagic implements ModInitializer {
 		// Proceed with mild caution.
 		if (FabricLoader.getInstance().getEnvironmentType() ==  EnvType.CLIENT){
 			((ClientUtils) MinecraftClient.getInstance()).addSpell(new FireBall());
+			((ClientUtils) MinecraftClient.getInstance()).addSpell(new HealSpell());
 		}
 			
 	}
@@ -71,5 +78,4 @@ public class EndAllMagic implements ModInitializer {
 	public static EndAllMagicConfig getConfig() {
 		return configHolder.getConfig();
 	}
-
 }

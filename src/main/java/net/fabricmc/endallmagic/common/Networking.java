@@ -5,7 +5,6 @@ import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -20,7 +19,7 @@ public class Networking {
 	public static void send(int spellId) {
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 		buf.writeVarInt(spellId);
-
+		EndAllMagic.LOGGER.info("sending id " + spellId);
 		ClientPlayNetworking.send(ID, buf);
 	}
 
@@ -29,6 +28,7 @@ public class Networking {
 
 		server.execute(() -> {
 			MagicUser user = (MagicUser) player;
+			EndAllMagic.LOGGER.info("recived id " + spellId);
 			Spell spell = EndAllMagic.SPELL.get(spellId);
 
 			if(user.getKnownSpells().getSpell(spell.pattern) != null) {
@@ -37,7 +37,6 @@ public class Networking {
 				if(player.isCreative() || (user.getCurrentMana() > 0) || (user.getCurrentMana() >= realManaCost)) {
 					player.sendMessage(Text.translatable(spell.getTranslationKey()).formatted(Formatting.GREEN), true);
 					user.setActiveSpell(spell, 0);
-					// spell.onCast(player.world, player);
 
 					if(!player.isCreative()) {
 						user.setLastCastTime(player.world.getTime());

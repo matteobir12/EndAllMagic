@@ -31,7 +31,7 @@ public class EndAllMagicConfig implements ConfigData {
 		public boolean enableDreamWarp = true;
 
 		@Comment("Should Magic Missile be enabled? (Restart Required)")
-		public boolean enableMagicMissile = true;
+		public boolean enableFireBall = true;
 
 		@Comment("Should Telekinetic Shock be enabled? (Restart Required)")
 		public boolean enableTelekineticShock = true;

@@ -5,31 +5,16 @@ import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
 import net.fabricmc.fabric.api.util.NbtType;
-import net.minecraft.block.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FireballEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -42,7 +27,6 @@ import static net.fabricmc.endallmagic.EndAllMagic.EntityAttributes.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements MagicUser {
@@ -54,6 +38,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Unique private long lastCastTime = 0;
 	@Unique private int spellTimer = 0;
 	@Unique private int maxMana = 20; // might need to track?
+	@Unique private int manaRegenTimer=50;
 	@Unique private final List<Entity> hasHit = new ArrayList<>();
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -153,7 +138,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	public void addMana(int amount) {
 		setMana(Math.min(getCurrentMana() + amount, getMaxMana()));
 	}
-
+	@Override
+	public int getManaRegenTimer() {
+		return manaRegenTimer;
+	}
 
 	@Override
 	public boolean isManaVisible() {

@@ -47,8 +47,14 @@ public class ClientMixin implements ClientUtils {
 				if(pattern.size() > 3) {
 					oshi.util.tuples.Pair<Spell,Boolean> p = knownSpells.getSpell(pattern);
 					if(Boolean.TRUE.equals(p.getB())){
-						if(p.getA() !=null) {
-							Networking.send(EndAllMagic.SPELL.getRawId(p.getA()));
+						if(p.getA() != null) {
+							for(Spell s : EndAllMagic.SPELL){ // can spell map by pattern
+								if (pattern.equals(s.pattern) ){
+									Networking.send(EndAllMagic.SPELL.getRawId(s));
+									break;
+								}
+									
+							}
 						}
 					}
 					else{

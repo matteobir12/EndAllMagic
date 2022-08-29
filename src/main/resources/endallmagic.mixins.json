@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "net.fabricmc.endallmagic.mixin",
   "compatibilityLevel": "JAVA_17",
-  "endallmagic": [
+  "mixins": [
     "PlayerEntityMixin"
   ],
   "client": [
