@@ -17,7 +17,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.ClientUtils;
-import net.fabricmc.endallmagic.common.Networking;
+import net.fabricmc.endallmagic.common.ServerClientBridge;
 import net.fabricmc.endallmagic.common.Pattern;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
@@ -50,7 +50,7 @@ public class ClientMixin implements ClientUtils {
 						if(p.getA() != null) {
 							for(Spell s : EndAllMagic.SPELL){ // can spell map by pattern
 								if (pattern.equals(s.pattern) ){
-									Networking.send(EndAllMagic.SPELL.getRawId(s));
+									ServerClientBridge.send(EndAllMagic.SPELL.getRawId(s));
 									break;
 								}
 									

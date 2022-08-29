@@ -3,12 +3,12 @@ package net.fabricmc.endallmagic;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.endallmagic.client.ClientUtils;
-import net.fabricmc.endallmagic.common.Networking;
+import net.fabricmc.endallmagic.common.ServerClientBridge;
 import net.fabricmc.endallmagic.common.spells.FireBall;
 import net.fabricmc.endallmagic.common.spells.HealSpell;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.Spells;
-import net.fabricmc.endallmagic.integration.EndAllMagicConfig;
+import net.fabricmc.endallmagic.config.EndAllMagicConfig;
 import net.fabricmc.endallmagic.items.Staff;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -47,7 +47,7 @@ public class EndAllMagic implements ModInitializer {
 		AutoConfig.register(EndAllMagicConfig.class, JanksonConfigSerializer::new);
 		Registry.register(Registry.ITEM, new Identifier(MOD_ID, "staff"), STAFF);
 		configHolder = AutoConfig.getConfigHolder(EndAllMagicConfig.class);
-		ServerPlayNetworking.registerGlobalReceiver(Networking.ID, Networking::handle);
+		ServerPlayNetworking.registerGlobalReceiver(ServerClientBridge.ID, ServerClientBridge::handle);
 		Spells.register();
 		SPELL.forEach((spell)-> {
 			LOGGER.info("got a spell");

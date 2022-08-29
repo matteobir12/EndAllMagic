@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-public class Networking {
+public class ServerClientBridge {
     public static final Identifier ID = new Identifier(EndAllMagic.MOD_ID, "cast_spell");
 
 	public static void send(int spellId) {
