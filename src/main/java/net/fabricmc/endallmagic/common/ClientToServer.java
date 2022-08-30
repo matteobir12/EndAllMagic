@@ -88,7 +88,6 @@ public class ClientToServer {
 	}
 
 	public static void openInventoryScreen(ButtonWidget button) {
-		EndAllMagic.LOGGER.info("clicked me here 3");
 		PacketByteBuf buf = PacketByteBufs.create();
 		buf.writeInt(-1);
 		

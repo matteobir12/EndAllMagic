@@ -19,9 +19,7 @@ public final class EventFactoryClient {
 			MagicScreenData screenData = (MagicScreenData)screen;
 			
 			if(Screens.getButtons(screen) != null) {
-				Screens.getButtons(screen).add(new TabButtonWidget(handledScreen, EndAllMagicClient.INVENTORY, 0, 0, -28, false, btn -> {
-					EndAllMagic.LOGGER.info("clicked me here 1");
-				}));
+				Screens.getButtons(screen).add(new TabButtonWidget(handledScreen, EndAllMagicClient.INVENTORY, 0, 0, -28, false, btn -> {}));
 				List<Page> pages = screenData.pages();
 				
 				for(int i = 0; i < pages.size(); i++) {

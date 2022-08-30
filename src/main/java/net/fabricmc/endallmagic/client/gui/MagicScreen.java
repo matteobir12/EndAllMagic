@@ -104,7 +104,6 @@ public class MagicScreen extends AbstractInventoryScreen<MagicScreenFactory.Hand
 			int v = j < 6 ? -28 : 162;
 			
 			this.addDrawableChild(new TabButtonWidget(this, page, j, u, v, true, btn -> {
-				EndAllMagic.LOGGER.info("clicked me here 4");
 				TabButtonWidget button = (TabButtonWidget)btn;
 				this.tab = button.index() - 1;
 				this.forEachTab(tab -> tab.active = true);
