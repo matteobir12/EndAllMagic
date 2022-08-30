@@ -10,8 +10,11 @@ import net.fabricmc.endallmagic.client.gui.CombatPageLayer;
 import net.fabricmc.endallmagic.client.gui.EventFactoryClient;
 import net.fabricmc.endallmagic.client.gui.MagicScreen;
 import net.fabricmc.endallmagic.client.gui.Page;
+import net.fabricmc.endallmagic.common.particles.HealParticle;
+import net.fabricmc.endallmagic.common.particles.ModParticles;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
@@ -37,8 +40,13 @@ public class EndAllMagicClient implements ClientModInitializer {
 		PageRegistry.registerPage(COMBAT_PAGE, new Identifier(EndAllMagic.MOD_ID, "textures/gui/combat.png"), Text.translatable("endallmagic.gui.page.combat.title"));
 		PageRegistry.registerLayer(ATTRIBUTES_PAGE, AttributesPageLayer::new);
 		PageRegistry.registerLayer(COMBAT_PAGE, CombatPageLayer::new);
+		particleFactoryRegistry();
 		
 		ScreenEvents.AFTER_INIT.register(EventFactoryClient::onScreenInit);
 		ClientTickEvents.END_CLIENT_TICK.register(EventFactoryClient::onKeyPressed);
+	}
+	public void particleFactoryRegistry() {
+		ParticleFactoryRegistry.getInstance().register(ModParticles.HEAL, HealParticle.Factory::new);
+
 	}
 }

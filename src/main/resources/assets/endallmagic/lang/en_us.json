@@ -1,0 +1,29 @@
+{
+	"error.arcanus.missing_spell": "This spell doesn't exist",
+	"error.arcanus.unknown_spell": "You don't know this spell yet",
+	"error.arcanus.not_enough_mana": "You don't have enough mana to cast this spell",
+	"error.arcanus.burnout": "You're feeling a bit worn out...",
+
+	"spell.arcanus.lunge": "Lunge",
+	"spell.arcanus.dream_warp": "Dream Warp",
+	"spell.arcanus.magic_missile": "Magic Missile",
+	"spell.arcanus.telekinetic_shock": "Telekinetic Shock",
+	"spell.arcanus.heal": "Heal",
+	"spell.arcanus.discombobulate": "Discombobulate",
+	"spell.arcanus.solar_strike": "Solar Strike",
+	"spell.arcanus.arcane_barrier": "Arcane Barrier",
+	"spell.arcanus.no_target": "Spell missed",
+
+	"item.arcanus.initiate_wand": "Initiate Wand",
+
+
+	"attribute.name.generic.arcanus.mana_cost": "Mana Cost",
+	"attribute.name.generic.arcanus.mana_regen": "Mana Regen",
+	"attribute.name.generic.arcanus.burnout_regen": "Burnout Regen",
+	"attribute.name.generic.arcanus.mana_lock": "Mana Lock",
+
+
+	"wand.arcanus.casting_cost": "Casting Cost",
+
+	"subtitles.arcanus.heal": "Heal"
+}
