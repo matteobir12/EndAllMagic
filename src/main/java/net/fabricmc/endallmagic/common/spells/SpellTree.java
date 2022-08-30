@@ -2,7 +2,6 @@ package net.fabricmc.endallmagic.common.spells;
 
 import java.util.function.Consumer;
 
-import net.fabricmc.endallmagic.common.Pattern;
 import oshi.util.tuples.Pair;
 
 public class SpellTree {
@@ -20,7 +19,7 @@ public class SpellTree {
         }
     }
 
-    private final SpellTreeNode head;
+    private SpellTreeNode head;
     
     public SpellTree(){
         head = new SpellTreeNode();
@@ -82,6 +81,35 @@ public class SpellTree {
 
     public void forEach(Consumer<Spell> forEachSpell){
         asList().forEach(forEachSpell);
+    }
+    public boolean isEmpty(){
+        return head.left ==null && head.right == null && head.spell == null;
+    }
+    public boolean contains(Spell spell){
+        return getSpell(spell.pattern).getA() !=null;
+    }
+
+    public void clear(){
+        head = new SpellTreeNode();
+    }
+
+    public void remove(Spell spell){
+        SpellTreeNode node = head;
+        for (Pattern p : spell.pattern){
+            if (p == Pattern.LEFT){
+                if (node.left == null)
+                    return;
+                
+                node = node.left;
+                
+            } else {
+                if (node.right == null)
+                    return;
+
+                node = node.right;
+            }
+        }
+        node.spell = null;
     }
 }
 

@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.common;
+package net.fabricmc.endallmagic.common.spells;
 
 public enum Pattern{
     LEFT {

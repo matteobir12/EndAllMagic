@@ -41,6 +41,7 @@ public class EndAllMagicClient implements ClientModInitializer {
 		PageRegistry.registerLayer(ATTRIBUTES_PAGE, AttributesPageLayer::new);
 		PageRegistry.registerLayer(COMBAT_PAGE, CombatPageLayer::new);
 		particleFactoryRegistry();
+		MagicHud.clientEvents();
 		
 		ScreenEvents.AFTER_INIT.register(EventFactoryClient::onScreenInit);
 		ClientTickEvents.END_CLIENT_TICK.register(EventFactoryClient::onKeyPressed);

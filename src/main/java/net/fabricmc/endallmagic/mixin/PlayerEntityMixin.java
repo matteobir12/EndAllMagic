@@ -2,6 +2,8 @@ package net.fabricmc.endallmagic.mixin;
 
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
+import net.fabricmc.endallmagic.common.SpellConfig;
+import net.fabricmc.endallmagic.common.SpellConfig.Affinity;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
 import net.fabricmc.fabric.api.util.NbtType;
@@ -37,7 +39,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Unique private Spell activeSpell = null;
 	@Unique private long lastCastTime = 0;
 	@Unique private int spellTimer = 0;
-	@Unique private int maxMana = 20; // might need to track?
 	@Unique private int manaRegenTimer=50;
 	@Unique private final List<Entity> hasHit = new ArrayList<>();
 
@@ -83,6 +84,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 
 		dataTracker.set(MANA, rootTag.getInt("Mana"));
 		dataTracker.set(SHOW_MANA, rootTag.getBoolean("ShowMana"));
+		int lvl = rootTag.getInt("Level");
+		dataTracker.set(LEVEL, lvl > 0? lvl :1);
+		dataTracker.set(AFFINITY, rootTag.getInt("Affinity"));
 		activeSpell = EndAllMagic.SPELL.get(new Identifier(rootTag.getString("ActiveSpell")));
 		lastCastTime = rootTag.getLong("LastCastTime");
 		spellTimer = rootTag.getInt("SpellTimer");
@@ -97,6 +101,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		knownSpells.forEach(spell -> listTag.add(NbtString.of(EndAllMagic.SPELL.getId(spell).toString())));
 		rootTag.put("KnownSpells", listTag);
 		rootTag.putInt("Mana", dataTracker.get(MANA));
+		rootTag.putInt("Level", dataTracker.get(LEVEL));
+		rootTag.putInt("Affinity", dataTracker.get(AFFINITY));
 		rootTag.putBoolean("ShowMana", dataTracker.get(SHOW_MANA));
 		rootTag.putString("ActiveSpell", activeSpell != null ? EndAllMagic.SPELL.getId(activeSpell).toString() : "");
 		rootTag.putLong("LastCastTime", lastCastTime);
@@ -105,8 +111,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 
 	@Inject(method = "initDataTracker", at = @At("HEAD"))
 	public void initTracker(CallbackInfo info) {
-		dataTracker.startTracking(MANA, maxMana);
+		dataTracker.startTracking(LEVEL, 1);
+		dataTracker.startTracking(MANA, getMaxMana());
 		dataTracker.startTracking(SHOW_MANA, false);
+		dataTracker.startTracking(AFFINITY, SpellConfig.Affinity.NONE.ordinal());
+		
 	}
 
 	@Override
@@ -126,7 +135,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 
 	@Override
 	public int getMaxMana() {
-		return maxMana;
+		return getLevel() * 20;
 	}
 
 	@Override
@@ -149,11 +158,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	}
 
 	@Override
-	public void shouldShowMana(boolean shouldShowMana) {
-		dataTracker.set(SHOW_MANA, shouldShowMana);
-	}
-
-	@Override
 	public void setLastCastTime(long lastCastTime) {
 		this.lastCastTime = lastCastTime;
 	}
@@ -162,6 +166,25 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	public void setActiveSpell(Spell spell, int timer) {
 		this.activeSpell = spell;
 		this.spellTimer = timer;
+	}
+	
+	@Override
+	public void setLevel(int level) {
+		dataTracker.set(LEVEL, level);
+		
+	}
+	@Override
+	public int getLevel() {
+		return dataTracker.get(LEVEL);
+	}
+	@Override
+	public void setAffinity(Affinity affinity) {
+		dataTracker.set(AFFINITY, affinity.ordinal());
+		
+	}
+	@Override
+	public Affinity getAffinity() {
+		return SpellConfig.Affinity.values()[dataTracker.get(AFFINITY)];
 	}
 
 }

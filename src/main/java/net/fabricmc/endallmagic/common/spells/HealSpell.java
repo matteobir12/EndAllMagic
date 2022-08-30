@@ -2,7 +2,6 @@ package net.fabricmc.endallmagic.common.spells;
 
 import java.util.Arrays;
 import net.fabricmc.endallmagic.common.MagicUser;
-import net.fabricmc.endallmagic.common.Pattern;
 import net.fabricmc.endallmagic.common.SpellConfig;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
 import net.fabricmc.endallmagic.common.sounds.ModSoundEvents;

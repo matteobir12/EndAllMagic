@@ -9,7 +9,8 @@
   "client": [
     "client.ClientMixin",
     "client.AbstractInventoryScreenMixin",
-    "client.InventoryScreenMixin"
+    "client.InventoryScreenMixin",
+    "client.InGameHudMixin"
 
   ],
   "injectors": {

@@ -3,7 +3,6 @@ package net.fabricmc.endallmagic.common.spells;
 
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
-import net.fabricmc.endallmagic.common.Pattern;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.random.Random;

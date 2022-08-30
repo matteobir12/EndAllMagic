@@ -1,5 +1,6 @@
 package net.fabricmc.endallmagic.common;
 
+import net.fabricmc.endallmagic.common.spells.Pattern;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
 
@@ -25,9 +26,15 @@ public interface MagicUser {
 
 	void addMana(int amount);
 
-	boolean isManaVisible();
+	void setLevel(int level);
 
-	void shouldShowMana(boolean shouldShowMana);
+	void setAffinity(SpellConfig.Affinity affinity);
+
+	int getLevel();
+
+	SpellConfig.Affinity getAffinity();
+
+	boolean isManaVisible();
 
 	void setLastCastTime(long lastCastTime);
 
