@@ -3,7 +3,8 @@ package net.fabricmc.endallmagic;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.endallmagic.client.ClientUtils;
-import net.fabricmc.endallmagic.common.ServerClientBridge;
+import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
+import net.fabricmc.endallmagic.common.ClientToServer;
 import net.fabricmc.endallmagic.common.spells.FireBall;
 import net.fabricmc.endallmagic.common.spells.HealSpell;
 import net.fabricmc.endallmagic.common.spells.Spell;
@@ -21,6 +22,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -37,8 +39,11 @@ public class EndAllMagic implements ModInitializer {
 	// custom reg public static final Registry<Spell> SPELL = createRegistry("spell", Spell.class);
 
 	public static final String MOD_ID = "endallmagic";
-
+	// screen handler reg
+	public static final ScreenHandlerType<MagicScreenFactory.Handler> MAGIC_SCREEN = Registry.register(Registry.SCREEN_HANDLER, new Identifier(MOD_ID, "magic_screen"), MagicScreenFactory.type());
+	// spell reg
 	public static final Registry<Spell> SPELL = FabricRegistryBuilder.createSimple(Spell.class, new Identifier(MOD_ID, "spell")).buildAndRegister();
+	
 	public static ConfigHolder<EndAllMagicConfig> configHolder;
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Staff STAFF = new Staff(new FabricItemSettings().group(ItemGroup.MISC));
@@ -47,11 +52,13 @@ public class EndAllMagic implements ModInitializer {
 		AutoConfig.register(EndAllMagicConfig.class, JanksonConfigSerializer::new);
 		Registry.register(Registry.ITEM, new Identifier(MOD_ID, "staff"), STAFF);
 		configHolder = AutoConfig.getConfigHolder(EndAllMagicConfig.class);
-		ServerPlayNetworking.registerGlobalReceiver(ServerClientBridge.ID, ServerClientBridge::handle);
+
+
+		// ServerLoginNetworking.registerGlobalReceiver(NetworkFactory.CONFIG, NetworkFactory::loginQueryResponse); send config deets on login
+		ServerPlayNetworking.registerGlobalReceiver(ClientToServer.ID, ClientToServer::handle);
+		ServerPlayNetworking.registerGlobalReceiver(ClientToServer.SCREEN, ClientToServer::switchScreen);
+
 		Spells.register();
-		SPELL.forEach((spell)-> {
-			LOGGER.info("got a spell");
-		});
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
 

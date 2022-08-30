@@ -23,6 +23,16 @@ public class EndAllMagicConfig implements ConfigData {
 	@ConfigEntry.Gui.CollapsibleObject
 	public SpellStuff spells = new SpellStuff();
 
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
+	@ConfigEntry.Gui.Tooltip
+	public int textScaleX = 50;
+
+	@ConfigEntry.Category(value = "client")
+	@ConfigEntry.BoundedDiscrete(min = 0, max = 50)
+	@ConfigEntry.Gui.Tooltip
+	public int textScaleY = 50;
+
 	public static class SpellStuff {
 		@Comment("Should Lunge be enabled? (Restart Required)")
 		public boolean enableLunge = true;
@@ -77,5 +87,13 @@ public class EndAllMagicConfig implements ConfigData {
 
 		@Comment("The Mana cost for the Arcane Barrier spell.")
 		public int arcaneBarrierCastingCost = 4;
+	}
+
+	public float textScaleX() {
+		return (this.textScaleX + 25) * 0.01F;
+	}
+	
+	public float textScaleY() {
+		return (this.textScaleY + 25) * 0.01F;
 	}
 }

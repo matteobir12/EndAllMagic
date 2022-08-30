@@ -5,10 +5,8 @@ import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.Pattern;
 import net.fabricmc.endallmagic.common.SpellConfig;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class HealSpell extends Spell {

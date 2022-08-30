@@ -21,8 +21,11 @@
     "main": [
       "net.fabricmc.endallmagic.EndAllMagic"
     ],
+    "client": [
+      "net.fabricmc.endallmagic.client.EndAllMagicClient"
+  ],
     "modmenu": [
-			"net.fabricmc.endallmagic.integration.EndAllMagicModMenu"
+			"net.fabricmc.endallmagic.config.EndAllMagicModMenu"
 		]
   },
   "mixins": [
