@@ -22,11 +22,11 @@ abstract class InventoryScreenMixin extends AbstractInventoryScreen<PlayerScreen
 	}
 	
 	private void endallmagic_forEachTab(Consumer<TabButtonWidget> consumer) {
-		this.children().stream().filter(e -> e instanceof TabButtonWidget).forEach(e -> consumer.accept((TabButtonWidget)e));
+		this.children().stream().filter(TabButtonWidget.class::isInstance).forEach(e -> consumer.accept((TabButtonWidget)e));
 	}
 	
 	@Inject(method = "render", at = @At("TAIL"))
-	private void endallmagic_render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
+	private void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		this.endallmagic_forEachTab(tab -> tab.renderTooltip(matrices, mouseX, mouseY));
 	}
 }

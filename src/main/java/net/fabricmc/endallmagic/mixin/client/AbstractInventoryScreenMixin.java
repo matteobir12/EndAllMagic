@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.EndAllMagicClient;
 import net.fabricmc.endallmagic.client.PageRegistryImpl;
 import net.fabricmc.endallmagic.client.gui.MagicScreenData;
@@ -38,7 +39,7 @@ abstract class AbstractInventoryScreenMixin<T extends ScreenHandler> extends Han
 	}
 	
 	@Inject(method = "<init>", at = @At("TAIL"))
-	private void endallmagic_init(T screenHandler, PlayerInventory playerInventory, Text text, CallbackInfo info) {
+	private void init(T screenHandler, PlayerInventory playerInventory, Text text, CallbackInfo info) {
 		this.endallmagic_pages.add(0, PageRegistryImpl.findPage(EndAllMagicClient.ATTRIBUTES_PAGE));
 		this.endallmagic_pages.add(1, PageRegistryImpl.findPage(EndAllMagicClient.COMBAT_PAGE));
 		PageRegistryImpl.pages().entrySet().stream().filter(this::filter).map(Map.Entry::getValue).forEach(page -> this.endallmagic_pages.add(page.get()));
