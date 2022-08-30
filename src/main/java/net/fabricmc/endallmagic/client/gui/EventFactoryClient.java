@@ -2,6 +2,7 @@ package net.fabricmc.endallmagic.client.gui;
 
 import java.util.List;
 
+import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.EndAllMagicClient;
 import net.fabricmc.endallmagic.client.gui.widget.TabButtonWidget;
 import net.fabricmc.endallmagic.common.ClientToServer;
@@ -18,7 +19,9 @@ public final class EventFactoryClient {
 			MagicScreenData screenData = (MagicScreenData)screen;
 			
 			if(Screens.getButtons(screen) != null) {
-				Screens.getButtons(screen).add(new TabButtonWidget(handledScreen, EndAllMagicClient.INVENTORY, 0, 0, -28, false, btn -> {}));
+				Screens.getButtons(screen).add(new TabButtonWidget(handledScreen, EndAllMagicClient.INVENTORY, 0, 0, -28, false, btn -> {
+					EndAllMagic.LOGGER.info("clicked me here 1");
+				}));
 				List<Page> pages = screenData.pages();
 				
 				for(int i = 0; i < pages.size(); i++) {

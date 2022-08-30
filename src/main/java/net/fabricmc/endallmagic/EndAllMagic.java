@@ -52,11 +52,13 @@ public class EndAllMagic implements ModInitializer {
 		AutoConfig.register(EndAllMagicConfig.class, JanksonConfigSerializer::new);
 		Registry.register(Registry.ITEM, new Identifier(MOD_ID, "staff"), STAFF);
 		configHolder = AutoConfig.getConfigHolder(EndAllMagicConfig.class);
+
+
+		// ServerLoginNetworking.registerGlobalReceiver(NetworkFactory.CONFIG, NetworkFactory::loginQueryResponse); send config deets on login
 		ServerPlayNetworking.registerGlobalReceiver(ClientToServer.ID, ClientToServer::handle);
+		ServerPlayNetworking.registerGlobalReceiver(ClientToServer.SCREEN, ClientToServer::switchScreen);
+
 		Spells.register();
-		SPELL.forEach((spell)-> {
-			LOGGER.info("got a spell");
-		});
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
 

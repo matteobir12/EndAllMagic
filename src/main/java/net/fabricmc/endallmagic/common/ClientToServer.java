@@ -6,6 +6,7 @@ import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -67,8 +68,8 @@ public class ClientToServer {
 	}
 
 	public static void openAttributesScreen(final int pageId) {
-		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-		buf.writeVarInt(pageId);
+		PacketByteBuf buf = PacketByteBufs.create();
+		buf.writeInt(pageId);
 		
 		ClientPlayNetworking.send(SCREEN, buf);
 	}
@@ -87,7 +88,8 @@ public class ClientToServer {
 	}
 
 	public static void openInventoryScreen(ButtonWidget button) {
-		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+		EndAllMagic.LOGGER.info("clicked me here 3");
+		PacketByteBuf buf = PacketByteBufs.create();
 		buf.writeInt(-1);
 		
 		ClientPlayNetworking.send(SCREEN, buf);
