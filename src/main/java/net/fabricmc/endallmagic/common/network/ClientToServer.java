@@ -1,9 +1,10 @@
-package net.fabricmc.endallmagic.common;
+package net.fabricmc.endallmagic.common.network;
 
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
+import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;

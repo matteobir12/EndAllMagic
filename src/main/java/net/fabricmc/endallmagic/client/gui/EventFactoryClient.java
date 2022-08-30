@@ -5,7 +5,7 @@ import java.util.List;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.EndAllMagicClient;
 import net.fabricmc.endallmagic.client.gui.widget.TabButtonWidget;
-import net.fabricmc.endallmagic.common.ClientToServer;
+import net.fabricmc.endallmagic.common.network.ClientToServer;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;

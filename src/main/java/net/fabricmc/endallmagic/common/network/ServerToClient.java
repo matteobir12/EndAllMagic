@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.common;
+package net.fabricmc.endallmagic.common.network;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.endallmagic.EndAllMagic;

@@ -4,7 +4,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.endallmagic.client.ClientUtils;
 import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
-import net.fabricmc.endallmagic.common.ClientToServer;
+import net.fabricmc.endallmagic.common.network.ClientToServer;
+import net.fabricmc.endallmagic.common.sounds.ModSoundEvents;
 import net.fabricmc.endallmagic.common.spells.FireBall;
 import net.fabricmc.endallmagic.common.spells.HealSpell;
 import net.fabricmc.endallmagic.common.spells.Spell;
@@ -59,6 +60,7 @@ public class EndAllMagic implements ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(ClientToServer.SCREEN, ClientToServer::switchScreen);
 
 		Spells.register();
+		ModSoundEvents.register();
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
 

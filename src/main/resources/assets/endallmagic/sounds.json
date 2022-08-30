@@ -1,0 +1,8 @@
+{
+	"heal": {
+		"subtitle": "subtitles.endallmagic.heal",
+		"sounds": [
+			"endallmagic:heal"
+		]
+	}
+}

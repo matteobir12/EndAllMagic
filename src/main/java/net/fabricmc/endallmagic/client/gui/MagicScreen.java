@@ -12,7 +12,7 @@ import net.fabricmc.endallmagic.api.client.PageLayer;
 import net.fabricmc.endallmagic.client.EndAllMagicClient;
 import net.fabricmc.endallmagic.client.PageRegistryImpl;
 import net.fabricmc.endallmagic.client.gui.widget.TabButtonWidget;
-import net.fabricmc.endallmagic.common.ClientToServer;
+import net.fabricmc.endallmagic.common.network.ClientToServer;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
