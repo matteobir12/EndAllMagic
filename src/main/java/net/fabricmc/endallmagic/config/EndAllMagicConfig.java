@@ -43,8 +43,8 @@ public class EndAllMagicConfig implements ConfigData {
 		@Comment("Should Magic Missile be enabled? (Restart Required)")
 		public boolean enableFireBall = true;
 
-		@Comment("Should Telekinetic Shock be enabled? (Restart Required)")
-		public boolean enableTelekineticShock = true;
+		@Comment("Should Wind Blade Shock be enabled? (Restart Required)")
+		public boolean enableWindBlade = true;
 
 		@Comment("Should Heal be enabled? (Restart Required)")
 		public boolean enableHeal = true;

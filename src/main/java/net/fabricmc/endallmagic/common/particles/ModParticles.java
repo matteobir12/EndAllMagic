@@ -12,10 +12,11 @@ import java.util.LinkedHashMap;
 
 public class ModParticles {
 	//-----Particle Map-----//
-	public static final LinkedHashMap<ParticleType<?>, Identifier> PARTICLE_TYPES = new LinkedHashMap<>();
+	public static final java.util.Map<ParticleType<?>, Identifier> PARTICLE_TYPES = new LinkedHashMap<>();
 
 	//-----Particles-----//
 	public static final ParticleType<DefaultParticleType> HEAL = create("heal", FabricParticleTypes.simple());
+	public static final ParticleType<DefaultParticleType> WIND_BLADE = create("wind_blade", FabricParticleTypes.simple());
 
 	//-----Registry-----//
 	public static void register() {

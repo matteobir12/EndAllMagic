@@ -14,6 +14,7 @@ public class ModSoundEvents {
 
 	//-----Sound Events-----//
 	public static final SoundEvent HEAL = create("heal");
+	public static final SoundEvent WIND_BLADE = create("windwoosh1");
 
 	//-----Registry-----//
 	public static void register() {

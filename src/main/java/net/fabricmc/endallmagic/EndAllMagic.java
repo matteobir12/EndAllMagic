@@ -4,9 +4,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.endallmagic.api.ModCommands;
 import net.fabricmc.endallmagic.client.ClientUtils;
-import net.fabricmc.endallmagic.client.MagicHud;
 import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
 import net.fabricmc.endallmagic.common.MagicUser;
+import net.fabricmc.endallmagic.common.entities.ModEntities;
 import net.fabricmc.endallmagic.common.network.ClientToServer;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
 import net.fabricmc.endallmagic.common.sounds.ModSoundEvents;
@@ -14,6 +14,7 @@ import net.fabricmc.endallmagic.common.spells.FireBall;
 import net.fabricmc.endallmagic.common.spells.HealSpell;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellConfig;
+import net.fabricmc.endallmagic.common.spells.WindBladeSpell;
 import net.fabricmc.endallmagic.config.EndAllMagicConfig;
 import net.fabricmc.endallmagic.items.Staff;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -69,6 +70,7 @@ public class EndAllMagic implements ModInitializer {
 		ModSoundEvents.register();
 		ModParticles.register();
 		ModCommands.register();
+		ModEntities.register();
 		commonEvents();
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
@@ -79,6 +81,7 @@ public class EndAllMagic implements ModInitializer {
 		if (FabricLoader.getInstance().getEnvironmentType() ==  EnvType.CLIENT){
 			((ClientUtils) MinecraftClient.getInstance()).addSpell(new FireBall());
 			((ClientUtils) MinecraftClient.getInstance()).addSpell(new HealSpell());
+			((ClientUtils) MinecraftClient.getInstance()).addSpell(new WindBladeSpell());
 		}
 			
 	}

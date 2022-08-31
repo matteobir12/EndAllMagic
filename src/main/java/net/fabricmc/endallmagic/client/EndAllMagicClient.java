@@ -5,16 +5,20 @@ import org.lwjgl.glfw.GLFW;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.api.client.PageRegistry;
+import net.fabricmc.endallmagic.client.entities.WindBladeEntityRenderer;
 import net.fabricmc.endallmagic.client.gui.AttributesPageLayer;
 import net.fabricmc.endallmagic.client.gui.CombatPageLayer;
 import net.fabricmc.endallmagic.client.gui.EventFactoryClient;
 import net.fabricmc.endallmagic.client.gui.MagicScreen;
 import net.fabricmc.endallmagic.client.gui.Page;
+import net.fabricmc.endallmagic.common.entities.ModEntities;
 import net.fabricmc.endallmagic.common.particles.HealParticle;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
+import net.fabricmc.endallmagic.common.particles.WindBladeParticle;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
@@ -41,6 +45,7 @@ public class EndAllMagicClient implements ClientModInitializer {
 		PageRegistry.registerLayer(ATTRIBUTES_PAGE, AttributesPageLayer::new);
 		PageRegistry.registerLayer(COMBAT_PAGE, CombatPageLayer::new);
 		particleFactoryRegistry();
+		entityRendererRegistry();
 		MagicHud.clientEvents();
 		
 		ScreenEvents.AFTER_INIT.register(EventFactoryClient::onScreenInit);
@@ -48,6 +53,10 @@ public class EndAllMagicClient implements ClientModInitializer {
 	}
 	public void particleFactoryRegistry() {
 		ParticleFactoryRegistry.getInstance().register(ModParticles.HEAL, HealParticle.Factory::new);
+		ParticleFactoryRegistry.getInstance().register(ModParticles.WIND_BLADE, WindBladeParticle.Factory::new);
 
+	}
+	public void entityRendererRegistry() {
+		EntityRendererRegistry.register(ModEntities.WIND_BLADE_ENTITY, WindBladeEntityRenderer::new);
 	}
 }

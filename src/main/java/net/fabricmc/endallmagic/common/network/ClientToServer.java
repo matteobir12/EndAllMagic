@@ -27,7 +27,6 @@ public class ClientToServer {
 	public static void send(int spellId) {
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 		buf.writeVarInt(spellId);
-		EndAllMagic.LOGGER.info("sending id " + spellId);
 		ClientPlayNetworking.send(ID, buf);
 	}
 

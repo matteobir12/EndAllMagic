@@ -4,5 +4,12 @@
 		"sounds": [
 			"endallmagic:heal"
 		]
+	},
+	"windwoosh1": {
+		"subtitle": "subtitles.endallmagic.windwoosh1",
+		"sounds": [
+			"endallmagic:windwoosh1"
+		]
 	}
+	
 }
