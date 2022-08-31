@@ -36,7 +36,6 @@ public class ClientToServer {
 
 		server.execute(() -> {
 			MagicUser user = (MagicUser) player;
-			EndAllMagic.LOGGER.info("recived id " + spellId);
 			Spell spell = EndAllMagic.SPELL.get(spellId);
 			if(user.getKnownSpells().getSpell(spell.pattern).getA() != null) {
 				int realManaCost = (spell.getManaCost()); // add some mana math here
