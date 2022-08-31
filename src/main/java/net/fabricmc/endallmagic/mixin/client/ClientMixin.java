@@ -12,6 +12,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.fabricmc.endallmagic.items.Staff;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
@@ -39,7 +40,7 @@ public class ClientMixin implements ClientUtils {
 		if(player == null)
 			return;
 
-		if(player.getMainHandStack().getItem() instanceof Staff) {
+		if(player.getMainHandStack().getItem() instanceof Staff || EndAllMagic.getConfig().spells.enableHandCasting && player.getMainHandStack().getItem() == Items.AIR) {
 			if(timer > 0) {
 				MutableText hyphen = Text.literal("-").formatted(Formatting.GRAY);
 				MutableText text = Text.literal("");
@@ -75,9 +76,7 @@ public class ClientMixin implements ClientUtils {
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doItemUse()V", ordinal = 0), cancellable = true)
 	public void onRightClick(CallbackInfo info) {
-		EndAllMagic.LOGGER.info("right Clicking");
-		if(player != null && !player.isSpectator() && player.getMainHandStack().getItem() instanceof Staff) {
-			EndAllMagic.LOGGER.info("with staff");
+		if(player != null && !player.isSpectator() && (player.getMainHandStack().getItem() instanceof Staff || EndAllMagic.getConfig().spells.enableHandCasting && player.getMainHandStack().getItem() == Items.AIR)) {
 			timer = 20;
 			pattern.add(Pattern.RIGHT);
 			player.swingHand(Hand.MAIN_HAND);
@@ -88,9 +87,7 @@ public class ClientMixin implements ClientUtils {
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z", ordinal = 0), cancellable = true)
 	public void onLeftClick(CallbackInfo info) {
-		EndAllMagic.LOGGER.info("left Clicking");
-		if(player != null && !player.isSpectator() && player.getMainHandStack().getItem() instanceof Staff) {
-			EndAllMagic.LOGGER.info("with staff");
+		if(player != null && !player.isSpectator() && (player.getMainHandStack().getItem() instanceof Staff || EndAllMagic.getConfig().spells.enableHandCasting && player.getMainHandStack().getItem() == Items.AIR)) {
 			timer = 20;
 			pattern.add(Pattern.LEFT);
 			player.swingHand(Hand.MAIN_HAND);
