@@ -38,10 +38,8 @@ public class ClientToServer {
 			MagicUser user = (MagicUser) player;
 			EndAllMagic.LOGGER.info("recived id " + spellId);
 			Spell spell = EndAllMagic.SPELL.get(spellId);
-
-			if(user.getKnownSpells().getSpell(spell.pattern) != null) {
+			if(user.getKnownSpells().getSpell(spell.pattern).getA() != null) {
 				int realManaCost = (spell.getManaCost()); // add some mana math here
-
 				if(player.isCreative() || (user.getCurrentMana() > 0) || (user.getCurrentMana() >= realManaCost)) {
 					player.sendMessage(Text.translatable(spell.getTranslationKey()).formatted(Formatting.GREEN), true);
 					user.setActiveSpell(spell, 0);
@@ -50,7 +48,6 @@ public class ClientToServer {
 						user.setLastCastTime(player.world.getTime());
 
 						if(user.getCurrentMana() < realManaCost) {
-							// int burnoutAmount = realManaCost - user.getCurrentMana();
 							// player.damage(ModDamageSource.MAGIC_BURNOUT, burnoutAmount); // damage if over
 							EndAllMagic.LOGGER.info("not enough mana");
 						}

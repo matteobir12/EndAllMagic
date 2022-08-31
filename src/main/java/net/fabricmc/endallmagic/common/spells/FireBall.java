@@ -2,7 +2,6 @@ package net.fabricmc.endallmagic.common.spells;
 
 import java.util.Arrays;
 import net.fabricmc.endallmagic.common.MagicUser;
-import net.fabricmc.endallmagic.common.SpellConfig;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.sound.SoundCategory;

@@ -2,6 +2,7 @@ package net.fabricmc.endallmagic.common;
 
 import net.fabricmc.endallmagic.common.spells.Pattern;
 import net.fabricmc.endallmagic.common.spells.Spell;
+import net.fabricmc.endallmagic.common.spells.SpellConfig;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
 
 public interface MagicUser {

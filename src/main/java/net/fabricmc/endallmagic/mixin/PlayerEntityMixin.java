@@ -2,10 +2,10 @@ package net.fabricmc.endallmagic.mixin;
 
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
-import net.fabricmc.endallmagic.common.SpellConfig;
-import net.fabricmc.endallmagic.common.SpellConfig.Affinity;
 import net.fabricmc.endallmagic.common.spells.Spell;
+import net.fabricmc.endallmagic.common.spells.SpellConfig;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
+import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;

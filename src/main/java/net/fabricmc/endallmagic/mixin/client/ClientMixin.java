@@ -21,13 +21,14 @@ import net.fabricmc.endallmagic.client.ClientUtils;
 import net.fabricmc.endallmagic.common.network.ClientToServer;
 import net.fabricmc.endallmagic.common.spells.Pattern;
 import net.fabricmc.endallmagic.common.spells.Spell;
+import net.fabricmc.endallmagic.common.spells.SpellConfig;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
 
 @Mixin(MinecraftClient.class)
 public class ClientMixin implements ClientUtils {
 	@Unique private SpellTree knownSpells = new SpellTree();
 	@Unique private int timer = 0;
-	@Unique private final java.util.List<Pattern> pattern = new java.util.ArrayList<>(3);
+	@Unique private final java.util.List<Pattern> pattern = new java.util.ArrayList<>(8);
 	@Shadow	@Nullable public ClientPlayerEntity player;
 
 	@Inject(method = "tick", at = @At("HEAD"))
@@ -44,17 +45,12 @@ public class ClientMixin implements ClientUtils {
 				MutableText text = Text.literal("");
 				for (Pattern p: pattern ) text.append(p.toString()).formatted(Formatting.GRAY).append(hyphen);
 				if (!pattern.isEmpty()) player.sendMessage(text, true);
-
 				if(pattern.size() > 3) {
-					oshi.util.tuples.Pair<Spell,Boolean> p = knownSpells.getSpell(pattern);
+					oshi.util.tuples.Pair<Spell,Boolean> p = SpellConfig.ENABLED_SPELLS.getSpell(pattern);
 					if(Boolean.TRUE.equals(p.getB())){
 						if(p.getA() != null) {
-							for(Spell s : EndAllMagic.SPELL){ // can spell map by pattern
-								if (pattern.equals(s.pattern) ){
-									ClientToServer.send(EndAllMagic.SPELL.getRawId(s));
-									break;
-								}
-									
+								if (pattern.equals(p.getA().pattern) ){
+									ClientToServer.send(EndAllMagic.SPELL.getRawId(p.getA()));
 							}
 						}
 					}

@@ -1,13 +1,8 @@
-package net.fabricmc.endallmagic.common;
+package net.fabricmc.endallmagic.common.spells;
 
 import java.util.Arrays;
 
 import net.fabricmc.endallmagic.EndAllMagic;
-import net.fabricmc.endallmagic.common.spells.FireBall;
-import net.fabricmc.endallmagic.common.spells.HealSpell;
-import net.fabricmc.endallmagic.common.spells.Pattern;
-import net.fabricmc.endallmagic.common.spells.Spell;
-import net.fabricmc.endallmagic.common.spells.SpellTree;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -21,8 +16,8 @@ public class SpellConfig {
     public static final java.util.List<Pattern> EARTH_PATTERN = new java.util.ArrayList<>(2);
     public static final java.util.List<Pattern> WIND_PATTERN = new java.util.ArrayList<>(2);
 
-    public static final Spell FIREBALL = new FireBall(); // use config constuctor and link to config
-	public static final Spell HEAL = new HealSpell();
+    public static final Spell FIREBALL;
+	public static final Spell HEAL;
 
     public enum Affinity {
 		FIRE,
@@ -37,6 +32,8 @@ public class SpellConfig {
         WATER_PATTERN.addAll(Arrays.asList(Pattern.RIGHT,Pattern.RIGHT));
         EARTH_PATTERN.addAll(Arrays.asList(Pattern.LEFT,Pattern.RIGHT));
         WIND_PATTERN.addAll(Arrays.asList(Pattern.RIGHT,Pattern.LEFT));
+		FIREBALL = new FireBall(); // use config constuctor and link to config
+		HEAL = new HealSpell();
     }
 
     public static void register() {
