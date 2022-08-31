@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.client.gui;
+package net.fabricmc.endallmagic.client.gui.pages;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -11,6 +11,9 @@ import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.api.client.PageLayer;
 import net.fabricmc.endallmagic.client.EndAllMagicClient;
 import net.fabricmc.endallmagic.client.PageRegistryImpl;
+import net.fabricmc.endallmagic.client.gui.MagicScreenData;
+import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
+import net.fabricmc.endallmagic.client.gui.MagicScreenFactory.Handler;
 import net.fabricmc.endallmagic.client.gui.widget.TabButtonWidget;
 import net.fabricmc.endallmagic.common.network.ClientToServer;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;

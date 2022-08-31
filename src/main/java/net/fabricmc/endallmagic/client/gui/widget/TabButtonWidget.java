@@ -5,7 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.gui.MagicScreenData;
-import net.fabricmc.endallmagic.client.gui.Page;
+import net.fabricmc.endallmagic.client.gui.pages.Page;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;

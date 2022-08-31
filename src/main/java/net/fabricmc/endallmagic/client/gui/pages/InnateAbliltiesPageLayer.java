@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.client.gui;
+package net.fabricmc.endallmagic.client.gui.pages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +22,14 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 @Environment(EnvType.CLIENT)
-public class CombatPageLayer extends PageLayer {
+public class InnateAbliltiesPageLayer extends PageLayer {
 	private static Supplier<Float> scaleX = () -> EndAllMagic.getConfig().textScaleX();
 	private static Supplier<Float> scaleY = () -> EndAllMagic.getConfig().textScaleY();
 	private static float scaleZ = 0.75F;
 	
 	private static final List<RenderComponent> COMPONENTS = new ArrayList<RenderComponent>();
 	
-	public CombatPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
+	public InnateAbliltiesPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(parent, handler, inventory, title);
 	}
 	

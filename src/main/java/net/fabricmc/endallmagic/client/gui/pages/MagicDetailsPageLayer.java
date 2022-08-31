@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.client.gui;
+package net.fabricmc.endallmagic.client.gui.pages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class AttributesPageLayer extends PageLayer {
+public class MagicDetailsPageLayer extends PageLayer {
 	private static Supplier<Float> scaleX = () -> EndAllMagic.getConfig().textScaleX();
 	private static Supplier<Float> scaleY = () -> EndAllMagic.getConfig().textScaleY();
 	private static float scaleZ = 0.75F;
@@ -39,7 +39,7 @@ public class AttributesPageLayer extends PageLayer {
 	
 	// private PlayerData playerData;
 	
-	public AttributesPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
+	public MagicDetailsPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(parent, handler, inventory, title);
 	}
 	
@@ -258,7 +258,7 @@ public class AttributesPageLayer extends PageLayer {
 			String maximum = ClientUtil.FORMATTING_2.format(entity.getMaxHealth());
 			return Text.translatable("endallmagic.gui.page.attributes.text.health", current, maximum).formatted(Formatting.DARK_GRAY);
 		}, entity -> {
-			List<Text> tooltip = new ArrayList<Text>();
+			List<Text> tooltip = new ArrayList<>();
 			tooltip.add(Text.translatable("endallmagic.gui.page.attributes.tooltip.health").formatted(Formatting.GRAY));
 			return tooltip;
 		}, 93, 37));

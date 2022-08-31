@@ -1,4 +1,4 @@
-package net.fabricmc.endallmagic.client.gui;
+package net.fabricmc.endallmagic.client.gui.pages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public final class Page {
 	private final Text title;
 	
 	public Page(final Identifier pageId, final Identifier icon, final Identifier texture, final Text title) {
-		this.layers = new ArrayList<PageLayer>();
+		this.layers = new ArrayList<>();
 		this.pageId = pageId;
 		this.icon = icon;
 		this.texture = texture;

@@ -34,8 +34,6 @@ public class EndAllMagicConfig implements ConfigData {
 	public int textScaleY = 50;
 
 	public static class SpellStuff {
-		@Comment("Should hand casting be enabled")
-		public boolean enableHandCasting = true;
 
 		@Comment("Should Lunge be enabled? (Restart Required)")
 		public boolean enableLunge = true;

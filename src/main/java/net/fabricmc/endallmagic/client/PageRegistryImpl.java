@@ -12,7 +12,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.api.client.PageLayer;
-import net.fabricmc.endallmagic.client.gui.Page;
+import net.fabricmc.endallmagic.client.gui.pages.Page;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 

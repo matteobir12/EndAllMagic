@@ -15,7 +15,7 @@ import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.EndAllMagicClient;
 import net.fabricmc.endallmagic.client.PageRegistryImpl;
 import net.fabricmc.endallmagic.client.gui.MagicScreenData;
-import net.fabricmc.endallmagic.client.gui.Page;
+import net.fabricmc.endallmagic.client.gui.pages.Page;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;

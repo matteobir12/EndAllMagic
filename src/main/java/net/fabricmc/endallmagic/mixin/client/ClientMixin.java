@@ -40,7 +40,7 @@ public class ClientMixin implements ClientUtils {
 		if(player == null)
 			return;
 
-		if(player.getMainHandStack().getItem() instanceof Staff || EndAllMagic.getConfig().spells.enableHandCasting && player.getMainHandStack().getItem() == Items.AIR) {
+		if(player.getMainHandStack().getItem() instanceof Staff || player.getMainHandStack().getItem() == Items.STICK) {
 			if(timer > 0) {
 				MutableText hyphen = Text.literal("-").formatted(Formatting.GRAY);
 				MutableText text = Text.literal("");
@@ -76,7 +76,7 @@ public class ClientMixin implements ClientUtils {
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doItemUse()V", ordinal = 0), cancellable = true)
 	public void onRightClick(CallbackInfo info) {
-		if(player != null && !player.isSpectator() && (player.getMainHandStack().getItem() instanceof Staff || EndAllMagic.getConfig().spells.enableHandCasting && player.getMainHandStack().getItem() == Items.AIR)) {
+		if(player != null && !player.isSpectator() && (player.getMainHandStack().getItem() instanceof Staff || player.getMainHandStack().getItem() == Items.STICK)) {
 			timer = 20;
 			pattern.add(Pattern.RIGHT);
 			player.swingHand(Hand.MAIN_HAND);
@@ -87,7 +87,7 @@ public class ClientMixin implements ClientUtils {
 
 	@Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z", ordinal = 0), cancellable = true)
 	public void onLeftClick(CallbackInfo info) {
-		if(player != null && !player.isSpectator() && (player.getMainHandStack().getItem() instanceof Staff || EndAllMagic.getConfig().spells.enableHandCasting && player.getMainHandStack().getItem() == Items.AIR)) {
+		if(player != null && !player.isSpectator() && (player.getMainHandStack().getItem() instanceof Staff || player.getMainHandStack().getItem() == Items.STICK)) {
 			timer = 20;
 			pattern.add(Pattern.LEFT);
 			player.swingHand(Hand.MAIN_HAND);
