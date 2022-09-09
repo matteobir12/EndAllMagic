@@ -3,11 +3,10 @@ package net.fabricmc.endallmagic;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.endallmagic.api.ModCommands;
-import net.fabricmc.endallmagic.client.ClientUtils;
 import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
 import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.entities.ModEntities;
-import net.fabricmc.endallmagic.common.network.ClientToServer;
+import net.fabricmc.endallmagic.common.network.ServerNetworking;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
 import net.fabricmc.endallmagic.common.sounds.ModSoundEvents;
 import net.fabricmc.endallmagic.common.spells.FireBall;
@@ -63,8 +62,9 @@ public class EndAllMagic implements ModInitializer {
 
 
 		// ServerLoginNetworking.registerGlobalReceiver(NetworkFactory.CONFIG, NetworkFactory::loginQueryResponse); send config deets on login
-		ServerPlayNetworking.registerGlobalReceiver(ClientToServer.ID, ClientToServer::handle);
-		ServerPlayNetworking.registerGlobalReceiver(ClientToServer.SCREEN, ClientToServer::switchScreen);
+		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.ID, ServerNetworking::castSpellReceive);
+		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.SCREEN, ServerNetworking::switchScreen);
+		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.AFFINITY, ServerNetworking::updateAffinityReceive);
 
 		SpellConfig.register();
 		ModSoundEvents.register();
@@ -75,13 +75,12 @@ public class EndAllMagic implements ModInitializer {
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
 
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
 		if (FabricLoader.getInstance().getEnvironmentType() ==  EnvType.CLIENT){
-			((ClientUtils) MinecraftClient.getInstance()).addSpell(new FireBall());
-			((ClientUtils) MinecraftClient.getInstance()).addSpell(new HealSpell());
-			((ClientUtils) MinecraftClient.getInstance()).addSpell(new WindBladeSpell());
+			MinecraftClient c = MinecraftClient.getInstance();
+			MagicUser user = (MagicUser)c.player;
+			user.setKnownSpell(new FireBall());
+			user.setKnownSpell(new HealSpell());
+			user.setKnownSpell(new WindBladeSpell());
 		}
 			
 	}
@@ -91,13 +90,13 @@ public class EndAllMagic implements ModInitializer {
 		public static final TrackedData<Integer> LEVEL = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
 		public static final TrackedData<Integer> AFFINITY = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
 		public static final TrackedData<Boolean> SHOW_MANA = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-		private DataTrackers(){};
+		private DataTrackers(){}
 	}
 
 	public static class EntityAttributes {
 		public static final EntityAttribute MANA_COST = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".mana_cost", 1D, 0D, 1024D).setTracked(true);
 		public static final EntityAttribute MANA_REGEN = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".mana_regen", 1D, 0D, 1024D).setTracked(true);
-		private EntityAttributes(){};
+		private EntityAttributes(){}
 	}
 
 	public static EndAllMagicConfig getConfig() {

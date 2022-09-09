@@ -1,17 +1,11 @@
 package net.fabricmc.endallmagic.common.network;
 
-
-import io.netty.buffer.Unpooled;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
 import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.spells.Spell;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -20,17 +14,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-public class ClientToServer {
-    public static final Identifier ID = new Identifier(EndAllMagic.MOD_ID, "cast_spell");
+public class ServerNetworking {
+	public static final Identifier ID = new Identifier(EndAllMagic.MOD_ID, "cast_spell");
 	public static final Identifier SCREEN = new Identifier(EndAllMagic.MOD_ID, "screen");
+	public static final Identifier AFFINITY = new Identifier(EndAllMagic.MOD_ID, "affinity");
 
-	public static void send(int spellId) {
-		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-		buf.writeVarInt(spellId);
-		ClientPlayNetworking.send(ID, buf);
-	}
-
-	public static void handle(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
+	public static void castSpellReceive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
 		int spellId = buf.readVarInt();
 
 		server.execute(() -> {
@@ -63,13 +52,6 @@ public class ClientToServer {
 		});
 	}
 
-	public static void openAttributesScreen(final int pageId) {
-		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeInt(pageId);
-		
-		ClientPlayNetworking.send(SCREEN, buf);
-	}
-
 	public static void switchScreen(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
 		int pageId = buf.readInt();
 		
@@ -82,14 +64,14 @@ public class ClientToServer {
 			}
 		});
 	}
+	public static void updateAffinityReceive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
+		int affinityIndex = buf.readVarInt();
 
-	public static void openInventoryScreen(ButtonWidget button) {
-		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeInt(-1);
-		
-		ClientPlayNetworking.send(SCREEN, buf);
-		MinecraftClient client = MinecraftClient.getInstance();
-		client.setScreen(new InventoryScreen(client.player));
+		server.execute(() -> {
+			MagicUser user = (MagicUser) player;
+			Affinity affinity = Affinity.values()[affinityIndex];
+			user.setAffinity(affinity);
+		});
 	}
 
 

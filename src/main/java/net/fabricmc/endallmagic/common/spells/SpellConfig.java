@@ -21,11 +21,42 @@ public class SpellConfig {
 	public static final Spell WINDBLADE;
 
     public enum Affinity {
-		FIRE,
-		WIND,
-		EARTH,
-		WATER,
-        NONE
+		FIRE {
+			@Override
+			public String toString() {
+				return "Fire";
+			}
+		},
+		WIND {
+			@Override
+			public String toString() {
+				return "Wind";
+			}
+		},
+		EARTH {
+			@Override
+			public String toString() {
+				return "Earth";
+			}
+		},
+		WATER {
+			@Override
+			public String toString() {
+				return "Water";
+			}
+		},
+        NONE {
+			@Override
+			public String toString() {
+				return "None";
+			}
+		}
+	}
+	public static Identifier affinityToId(Affinity a) {
+		return new Identifier(EndAllMagic.MOD_ID,String.valueOf(a.ordinal()));
+	}
+	public static Affinity idToAffinity(Identifier id) {
+		return Affinity.values()[Integer.parseInt(id.getPath())];
 	}
 
     static{

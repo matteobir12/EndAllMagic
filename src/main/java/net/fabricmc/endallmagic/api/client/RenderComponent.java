@@ -1,9 +1,7 @@
 package net.fabricmc.endallmagic.api.client;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 
 import net.fabricmc.api.EnvType;
@@ -11,7 +9,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.text.Text;
 
 /**

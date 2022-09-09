@@ -13,11 +13,13 @@ import net.fabricmc.endallmagic.client.EndAllMagicClient;
 import net.fabricmc.endallmagic.client.PageRegistryImpl;
 import net.fabricmc.endallmagic.client.gui.MagicScreenData;
 import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
-import net.fabricmc.endallmagic.client.gui.MagicScreenFactory.Handler;
 import net.fabricmc.endallmagic.client.gui.widget.TabButtonWidget;
-import net.fabricmc.endallmagic.common.network.ClientToServer;
+import net.fabricmc.endallmagic.common.MagicUser;
+import net.fabricmc.endallmagic.common.network.ClientNetworking;
+import net.fabricmc.endallmagic.common.network.ServerNetworking;
+import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -98,7 +100,7 @@ public class MagicScreen extends AbstractInventoryScreen<MagicScreenFactory.Hand
 	protected void init() {
 		super.init();
 		this.clearChildren();
-		this.addDrawableChild(new TabButtonWidget(this, EndAllMagicClient.INVENTORY, 0, 0, -28, true,ClientToServer::openInventoryScreen));
+		this.addDrawableChild(new TabButtonWidget(this, EndAllMagicClient.INVENTORY, 0, 0, -28, true,ClientNetworking::openInventoryScreen));
 		
 		for(int i = 0; i < this.getPages().size(); i++) {
 			Page page = this.getPages().get(i);
@@ -109,6 +111,7 @@ public class MagicScreen extends AbstractInventoryScreen<MagicScreenFactory.Hand
 			this.addDrawableChild(new TabButtonWidget(this, page, j, u, v, true, btn -> {
 				TabButtonWidget button = (TabButtonWidget)btn;
 				this.tab = button.index() - 1;
+
 				this.forEachTab(tab -> tab.active = true);
 				button.active = false;
 				this.init();
@@ -125,5 +128,8 @@ public class MagicScreen extends AbstractInventoryScreen<MagicScreenFactory.Hand
 			layer.init(this.client, this.width, this.height);
 			layer.children().stream().filter(ButtonWidget.class::isInstance).forEach(e -> this.addDrawableChild((ButtonWidget)e));
 		});
+	}
+	public void setTab(int tab) {
+		this.tab = tab;
 	}
 }

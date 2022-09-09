@@ -6,7 +6,8 @@ import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.EndAllMagicClient;
 import net.fabricmc.endallmagic.client.gui.pages.Page;
 import net.fabricmc.endallmagic.client.gui.widget.TabButtonWidget;
-import net.fabricmc.endallmagic.common.network.ClientToServer;
+import net.fabricmc.endallmagic.common.network.ClientNetworking;
+import net.fabricmc.endallmagic.common.network.ServerNetworking;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -29,7 +30,7 @@ public final class EventFactoryClient {
 					int u = ((j % 5) * 29) + (j < 6 ? 0 : 3);
 					int v = j < 6 ? -28 : 162;
 					
-					Screens.getButtons(screen).add(new TabButtonWidget(handledScreen, page, j, u, v, true, btn -> ClientToServer.openAttributesScreen(j - 1)));
+					Screens.getButtons(screen).add(new TabButtonWidget(handledScreen, page, j, u, v, true, btn -> ClientNetworking.openAttributesScreen(j - 1)));
 				}
 			}
 		}
@@ -38,7 +39,7 @@ public final class EventFactoryClient {
 	public static void onKeyPressed(MinecraftClient client) {
 		while(EndAllMagicClient.keyBinding.wasPressed()) {
 			if(client.currentScreen == null && !client.interactionManager.hasRidingInventory()) {
-				ClientToServer.openAttributesScreen(0);
+				ClientNetworking.openAttributesScreen(0);
 			}
 		}
 	}

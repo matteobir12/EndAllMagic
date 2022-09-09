@@ -2,6 +2,7 @@ package net.fabricmc.endallmagic.mixin;
 
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
+import net.fabricmc.endallmagic.common.network.ClientNetworking;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellConfig;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
@@ -87,6 +89,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		int lvl = rootTag.getInt("Level");
 		dataTracker.set(LEVEL, lvl > 0? lvl :1);
 		dataTracker.set(AFFINITY, rootTag.getInt("Affinity"));
+		EndAllMagic.LOGGER.info("reading affinity: " + dataTracker.get(AFFINITY));
 		activeSpell = EndAllMagic.SPELL.get(new Identifier(rootTag.getString("ActiveSpell")));
 		lastCastTime = rootTag.getLong("LastCastTime");
 		spellTimer = rootTag.getInt("SpellTimer");
@@ -102,6 +105,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		rootTag.put("KnownSpells", listTag);
 		rootTag.putInt("Mana", dataTracker.get(MANA));
 		rootTag.putInt("Level", dataTracker.get(LEVEL));
+		EndAllMagic.LOGGER.info("writing affinity: " + dataTracker.get(AFFINITY));
 		rootTag.putInt("Affinity", dataTracker.get(AFFINITY));
 		rootTag.putBoolean("ShowMana", dataTracker.get(SHOW_MANA));
 		rootTag.putString("ActiveSpell", activeSpell != null ? EndAllMagic.SPELL.getId(activeSpell).toString() : "");
@@ -180,6 +184,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Override
 	public void setAffinity(Affinity affinity) {
 		dataTracker.set(AFFINITY, affinity.ordinal());
+		
 		
 	}
 	@Override

@@ -28,8 +28,9 @@ import net.minecraft.util.Identifier;
 
 public class EndAllMagicClient implements ClientModInitializer {
 	public static final Identifier GUI = new Identifier(EndAllMagic.MOD_ID, "textures/gui/gui.png");
-	public static final Identifier ATTRIBUTES_PAGE = new Identifier(EndAllMagic.MOD_ID, "attributes");
-	public static final Identifier COMBAT_PAGE = new Identifier(EndAllMagic.MOD_ID, "combat");
+	public static final Identifier NO_AFF_BACKGROUND = new Identifier(EndAllMagic.MOD_ID, "textures/gui/pick_affinity_background.png");
+	public static final Identifier MAGIC_DETAILS = new Identifier(EndAllMagic.MOD_ID, "details");
+	public static final Identifier INNATE_ABLILITIES = new Identifier(EndAllMagic.MOD_ID, "abilities");
 	public static final Page INVENTORY = new Page(new Identifier(EndAllMagic.MOD_ID, "inventory"), new Identifier(EndAllMagic.MOD_ID, "textures/gui/inventory.png"), Text.translatable("endallmagic.gui.page.inventory.title"));
 	public static KeyBinding keyBinding;
 	
@@ -40,10 +41,10 @@ public class EndAllMagicClient implements ClientModInitializer {
 		
 		keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("endallmagic.key.screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.inventory"));
 		HandledScreens.register(EndAllMagic.MAGIC_SCREEN, MagicScreen::new);
-		PageRegistry.registerPage(ATTRIBUTES_PAGE, new Identifier(EndAllMagic.MOD_ID, "textures/gui/attributes.png"), Text.translatable("endallmagic.gui.page.attributes.title"));
-		PageRegistry.registerPage(COMBAT_PAGE, new Identifier(EndAllMagic.MOD_ID, "textures/gui/combat.png"), Text.translatable("endallmagic.gui.page.combat.title"));
-		PageRegistry.registerLayer(ATTRIBUTES_PAGE, MagicDetailsPageLayer::new);
-		PageRegistry.registerLayer(COMBAT_PAGE, InnateAbliltiesPageLayer::new);
+		PageRegistry.registerPage(MAGIC_DETAILS, new Identifier(EndAllMagic.MOD_ID, "textures/gui/attributes.png"), Text.translatable("endallmagic.gui.page.attributes.title"));
+		PageRegistry.registerPage(INNATE_ABLILITIES, new Identifier(EndAllMagic.MOD_ID, "textures/gui/combat.png"), Text.translatable("endallmagic.gui.page.combat.title"));
+		PageRegistry.registerLayer(MAGIC_DETAILS, MagicDetailsPageLayer::new);
+		PageRegistry.registerLayer(INNATE_ABLILITIES, InnateAbliltiesPageLayer::new);
 		particleFactoryRegistry();
 		entityRendererRegistry();
 		MagicHud.clientEvents();

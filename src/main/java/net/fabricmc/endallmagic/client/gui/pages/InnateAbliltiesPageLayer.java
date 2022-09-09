@@ -27,7 +27,7 @@ public class InnateAbliltiesPageLayer extends PageLayer {
 	private static Supplier<Float> scaleY = () -> EndAllMagic.getConfig().textScaleY();
 	private static float scaleZ = 0.75F;
 	
-	private static final List<RenderComponent> COMPONENTS = new ArrayList<RenderComponent>();
+	private static final List<RenderComponent> COMPONENTS = new ArrayList<>();
 	
 	public InnateAbliltiesPageLayer(HandledScreen<?> parent, ScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(parent, handler, inventory, title);

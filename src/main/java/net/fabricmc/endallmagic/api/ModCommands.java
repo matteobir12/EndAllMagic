@@ -16,6 +16,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.spells.Spell;
+import net.fabricmc.endallmagic.common.spells.SpellConfig;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
@@ -66,7 +67,14 @@ public class ModCommands {
 						.then(CommandManager.argument("set", IntegerArgumentType.integer())
 								.executes(context -> SpellsCommand.setPlayerLevel(context, context.getSource().getPlayer(),IntegerArgumentType.getInteger(context, "set")))
 								.then(CommandManager.argument("player", EntityArgumentType.player())
-										.executes(context -> SpellsCommand.setPlayerLevel(context, EntityArgumentType.getPlayer(context, "player"),IntegerArgumentType.getInteger(context, "set")))))));
+										.executes(context -> SpellsCommand.setPlayerLevel(context, EntityArgumentType.getPlayer(context, "player"),IntegerArgumentType.getInteger(context, "set"))))))
+				.then(CommandManager.literal("affinity").requires(source -> source.hasPermissionLevel(3))
+						.then(CommandManager.argument("set", IntegerArgumentType.integer())
+								.executes(context -> SpellsCommand.setPlayerAffinity(context, context.getSource().getPlayer(),IntegerArgumentType.getInteger(context, "set")))
+								.then(CommandManager.argument("player", EntityArgumentType.player())
+										.executes(context -> SpellsCommand.setPlayerAffinity(context, EntityArgumentType.getPlayer(context, "player"),IntegerArgumentType.getInteger(context, "set")))))
+						.then(CommandManager.literal("show")
+								.executes(SpellsCommand::showAffinity))));
 	}
 
 	public static class SpellArgumentType implements ArgumentType<Spell> {
@@ -203,9 +211,15 @@ public class ModCommands {
 
 			return Command.SINGLE_SUCCESS;
 		}
+		public static int showAffinity(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+			PlayerEntity player = context.getSource().getPlayer();
+			Text t = Text.literal(((MagicUser) player).getAffinity().toString());
+			context.getSource().sendFeedback(t, false);
 
+			return Command.SINGLE_SUCCESS;
+		}
 		public static int removeSpellFromPlayer(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-			PlayerEntity player = EntityArgumentType.getPlayer(context, "player");
+			PlayerEntity player = context.getSource().getPlayer();
 			MagicUser user = (MagicUser) player;
 			Spell spell = ModCommands.SpellArgumentType.getSpell(context, "spell");
 
@@ -225,6 +239,15 @@ public class ModCommands {
 				return Command.SINGLE_SUCCESS;
 			}
 			user.setLevel(level);
+			return Command.SINGLE_SUCCESS;
+		}
+		public static int setPlayerAffinity(CommandContext<ServerCommandSource> context, PlayerEntity player, int affinity) throws CommandSyntaxException {
+			MagicUser user = (MagicUser) player;
+			if(affinity > 4 || affinity < 0){
+				context.getSource().sendError(Text.translatable("commands." + EndAllMagic.MOD_ID + ".int_not_in_range"));
+				return Command.SINGLE_SUCCESS;
+			}
+			user.setAffinity(SpellConfig.Affinity.values()[affinity]);
 			return Command.SINGLE_SUCCESS;
 		}
 

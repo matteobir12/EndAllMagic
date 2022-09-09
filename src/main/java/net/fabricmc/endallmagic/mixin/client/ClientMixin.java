@@ -19,16 +19,17 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.ClientUtils;
-import net.fabricmc.endallmagic.common.network.ClientToServer;
+import net.fabricmc.endallmagic.common.MagicUser;
+import net.fabricmc.endallmagic.common.network.ClientNetworking;
 import net.fabricmc.endallmagic.common.spells.Pattern;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellConfig;
-import net.fabricmc.endallmagic.common.spells.SpellTree;
+import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
 
 @Mixin(MinecraftClient.class)
 public class ClientMixin implements ClientUtils {
-	@Unique private SpellTree knownSpells = new SpellTree();
 	@Unique private int timer = 0;
+	@Unique private Affinity affinity = Affinity.NONE;
 	@Unique private final java.util.List<Pattern> pattern = new java.util.ArrayList<>(8);
 	@Shadow	@Nullable public ClientPlayerEntity player;
 
@@ -42,26 +43,23 @@ public class ClientMixin implements ClientUtils {
 
 		if(player.getMainHandStack().getItem() instanceof Staff || player.getMainHandStack().getItem() == Items.STICK) {
 			if(timer > 0) {
-				MutableText hyphen = Text.literal("-").formatted(Formatting.GRAY);
-				MutableText text = Text.literal("");
-				for (Pattern p: pattern ) text.append(p.toString()).formatted(Formatting.GRAY).append(hyphen);
-				if (!pattern.isEmpty()) player.sendMessage(text, true);
+				if (!pattern.isEmpty()){
+					MutableText hyphen = Text.literal("-").formatted(Formatting.GRAY);
+					MutableText text = Text.literal(pattern.get(0).toString());
+					for (int i =1;i<pattern.size();i++) text.append(hyphen).append(pattern.get(i).toString()).formatted(Formatting.GRAY);
+					player.sendMessage(text, true);
+				}
 				if(pattern.size() > 3) {
-					oshi.util.tuples.Pair<Spell,Boolean> p = SpellConfig.ENABLED_SPELLS.getSpell(pattern);
+					oshi.util.tuples.Pair<Spell,Boolean> p = ((MagicUser)player).getKnownSpells().getSpell(pattern);
 					if(Boolean.TRUE.equals(p.getB())){
 						if(p.getA() != null) {
-								if (pattern.equals(p.getA().pattern) ){
-									ClientToServer.send(EndAllMagic.SPELL.getRawId(p.getA()));
-							}
+								ClientNetworking.castSpellSend(EndAllMagic.SPELL.getRawId(p.getA()));
 						}
 					}
 					else{
 						pattern.clear();
 						timer = 0;
 					}
-					
-
-					timer = 0;
 				}
 			}
 			else if(pattern.size() < 3 && !pattern.isEmpty())
@@ -103,9 +101,13 @@ public class ClientMixin implements ClientUtils {
 	public void setTimer(int value) {
 		timer = value;
 	}
-	public void addSpell(Spell spell){
-		knownSpells.addSpell(spell);
-		EndAllMagic.LOGGER.info("added spell!");
+	public void setAffinity(Affinity affinity){
+		EndAllMagic.LOGGER.info("sdd");
+		this.affinity = affinity;
+
+	}
+	public Affinity getAffinity(){
+		return affinity;
 	}
     
 }
