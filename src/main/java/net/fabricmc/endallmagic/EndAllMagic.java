@@ -74,14 +74,6 @@ public class EndAllMagic implements ModInitializer {
 		commonEvents();
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
-
-		if (FabricLoader.getInstance().getEnvironmentType() ==  EnvType.CLIENT){
-			MinecraftClient c = MinecraftClient.getInstance();
-			MagicUser user = (MagicUser)c.player;
-			user.setKnownSpell(new FireBall());
-			user.setKnownSpell(new HealSpell());
-			user.setKnownSpell(new WindBladeSpell());
-		}
 			
 	}
 

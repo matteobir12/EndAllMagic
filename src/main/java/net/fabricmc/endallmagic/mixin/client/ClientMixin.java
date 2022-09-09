@@ -19,7 +19,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.ClientUtils;
-import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.network.ClientNetworking;
 import net.fabricmc.endallmagic.common.spells.Pattern;
 import net.fabricmc.endallmagic.common.spells.Spell;
@@ -50,13 +49,15 @@ public class ClientMixin implements ClientUtils {
 					player.sendMessage(text, true);
 				}
 				if(pattern.size() > 3) {
-					oshi.util.tuples.Pair<Spell,Boolean> p = ((MagicUser)player).getKnownSpells().getSpell(pattern);
+					oshi.util.tuples.Pair<Spell,Boolean> p = SpellConfig.ENABLED_SPELLS.getSpell(pattern); // is rightclick on a different thread? if so potential bug?
 					if(Boolean.TRUE.equals(p.getB())){
 						if(p.getA() != null) {
 								ClientNetworking.castSpellSend(EndAllMagic.SPELL.getRawId(p.getA()));
+								pattern.clear();
+								timer = 0;
 						}
-					}
-					else{
+					}else{
+						player.sendMessage(Text.translatable("error." + EndAllMagic.MOD_ID + ".unknown_spell").formatted(Formatting.RED), true);
 						pattern.clear();
 						timer = 0;
 					}
@@ -93,21 +94,7 @@ public class ClientMixin implements ClientUtils {
 			info.cancel();
 		}
 	}
-
-	public java.util.List<Pattern> getPattern() {
-		return pattern;
-	}
-
 	public void setTimer(int value) {
 		timer = value;
 	}
-	public void setAffinity(Affinity affinity){
-		EndAllMagic.LOGGER.info("sdd");
-		this.affinity = affinity;
-
-	}
-	public Affinity getAffinity(){
-		return affinity;
-	}
-    
 }

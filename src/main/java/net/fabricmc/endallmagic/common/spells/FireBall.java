@@ -34,6 +34,7 @@ public class FireBall extends Spell {
         Vec3d rotation = entity.getRotationVec(1F);
         rotation.normalize().multiply(4.5F);
         FireballEntity fireBall = new FireballEntity(world, entity, rotation.x, rotation.y, rotation.z, damage);
+        fireBall.setPosition(entity.getX(), entity.getY()+.5, entity.getZ());
 
         world.spawnEntity(fireBall);
         world.playSound(null, entity.getBlockPos(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 2F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);

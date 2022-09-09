@@ -116,6 +116,7 @@ public class ModCommands {
 
 				knownSpells = knownSpells.append(")");
 			}
+			context.getSource().sendFeedback(knownSpells,false);
 			context.getSource().sendFeedback(Text.translatable("commands." + EndAllMagic.MOD_ID + ".spells.list", player.getEntityName(), knownSpells), false);
 
 			return ((MagicUser) player).getKnownSpells().asList().size();
@@ -141,7 +142,7 @@ public class ModCommands {
 			Spell spell = ModCommands.SpellArgumentType.getSpell(context, "spell");
 
 			if(!user.getKnownSpells().contains(spell)) {
-				user.getKnownSpells().addSpell(spell);
+				user.setKnownSpell(spell);
 				context.getSource().sendFeedback(Text.translatable("commands." + EndAllMagic.MOD_ID + ".spells.added", EndAllMagic.SPELL.getId(spell), player.getEntityName()), false);
 			}
 			else
@@ -170,7 +171,7 @@ public class ModCommands {
 			Spell spell = ModCommands.SpellArgumentType.getSpell(context, "spell");
 
 			if(!user.getKnownSpells().contains(spell)) {
-				user.getKnownSpells().addSpell(spell);
+				user.setKnownSpell(spell);
 				context.getSource().sendFeedback(Text.translatable("commands." + EndAllMagic.MOD_ID + ".spells.added", EndAllMagic.SPELL.getId(spell), player.getEntityName()), false);
 			}
 			else

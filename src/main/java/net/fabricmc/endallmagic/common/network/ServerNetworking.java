@@ -1,11 +1,14 @@
 package net.fabricmc.endallmagic.common.network;
 
+import io.netty.buffer.Unpooled;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.client.gui.MagicScreenFactory;
 import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -18,6 +21,8 @@ public class ServerNetworking {
 	public static final Identifier ID = new Identifier(EndAllMagic.MOD_ID, "cast_spell");
 	public static final Identifier SCREEN = new Identifier(EndAllMagic.MOD_ID, "screen");
 	public static final Identifier AFFINITY = new Identifier(EndAllMagic.MOD_ID, "affinity");
+	public static final Identifier ADDSPELL = new Identifier(EndAllMagic.MOD_ID, "add_spell");
+	
 
 	public static void castSpellReceive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
 		int spellId = buf.readVarInt();
@@ -72,6 +77,11 @@ public class ServerNetworking {
 			Affinity affinity = Affinity.values()[affinityIndex];
 			user.setAffinity(affinity);
 		});
+	}
+	public static<T extends LivingEntity & MagicUser> void sendKnownSpell(T player,Spell spell){
+		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+		buf.writeVarInt(EndAllMagic.SPELL.getRawId(spell));
+		ServerPlayNetworking.send((ServerPlayerEntity)player, ADDSPELL, buf);
 	}
 
 

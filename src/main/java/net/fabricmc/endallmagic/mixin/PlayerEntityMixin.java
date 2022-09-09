@@ -1,20 +1,21 @@
 package net.fabricmc.endallmagic.mixin;
 
+import net.fabricmc.api.EnvType;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
-import net.fabricmc.endallmagic.common.network.ClientNetworking;
+import net.fabricmc.endallmagic.common.network.ServerNetworking;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellConfig;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
 import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
 import net.fabricmc.fabric.api.util.NbtType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
@@ -130,6 +131,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Override
 	public void setKnownSpell(Spell spell) {
 		knownSpells.addSpell(spell);
+		if (!world.isClient)
+			ServerNetworking.sendKnownSpell(this, spell);
 	}
 
 	@Override

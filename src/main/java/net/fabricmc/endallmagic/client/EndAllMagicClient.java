@@ -12,11 +12,14 @@ import net.fabricmc.endallmagic.client.gui.pages.MagicDetailsPageLayer;
 import net.fabricmc.endallmagic.client.gui.pages.MagicScreen;
 import net.fabricmc.endallmagic.client.gui.pages.Page;
 import net.fabricmc.endallmagic.common.entities.ModEntities;
+import net.fabricmc.endallmagic.common.network.ClientNetworking;
+import net.fabricmc.endallmagic.common.network.ServerNetworking;
 import net.fabricmc.endallmagic.common.particles.HealParticle;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
 import net.fabricmc.endallmagic.common.particles.WindBladeParticle;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
@@ -37,12 +40,12 @@ public class EndAllMagicClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		// ClientLoginNetworking.registerGlobalReceiver(NetworkFactory.CONFIG, NetworkFactoryClient::loginQueryReceived); when client logs in recieves config data from server
-		// ClientPlayNetworking.registerGlobalReceiver(NetworkFactory.NOTIFY, NetworkFactoryClient::notifiedLevelUp); when client recieves from the server that they leveled up
+		ClientPlayNetworking.registerGlobalReceiver(ServerNetworking.ADDSPELL, ClientNetworking::receiveKnownSpell);
 		
 		keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("endallmagic.key.screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.inventory"));
 		HandledScreens.register(EndAllMagic.MAGIC_SCREEN, MagicScreen::new);
-		PageRegistry.registerPage(MAGIC_DETAILS, new Identifier(EndAllMagic.MOD_ID, "textures/gui/attributes.png"), Text.translatable("endallmagic.gui.page.attributes.title"));
-		PageRegistry.registerPage(INNATE_ABLILITIES, new Identifier(EndAllMagic.MOD_ID, "textures/gui/combat.png"), Text.translatable("endallmagic.gui.page.combat.title"));
+		PageRegistry.registerPage(MAGIC_DETAILS, new Identifier(EndAllMagic.MOD_ID, "textures/gui/magic_details.png"), Text.translatable("endallmagic.gui.page.magic_details.title"));
+		PageRegistry.registerPage(INNATE_ABLILITIES, new Identifier(EndAllMagic.MOD_ID, "textures/gui/attributes.png"), Text.translatable("endallmagic.gui.page.innate.title"));
 		PageRegistry.registerLayer(MAGIC_DETAILS, MagicDetailsPageLayer::new);
 		PageRegistry.registerLayer(INNATE_ABLILITIES, InnateAbliltiesPageLayer::new);
 		particleFactoryRegistry();
