@@ -27,12 +27,15 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
 public class MagicDetailsPageLayer extends PageLayer {
 	private static Supplier<Float> scaleX = () -> EndAllMagic.getConfig().textScaleX();
 	private static Supplier<Float> scaleY = () -> EndAllMagic.getConfig().textScaleY();
 	private static float scaleZ = 0.75F;
+	private int xOffset = 0;
+	private int yOffset = 0;
 	
 	private static final List<RenderComponent> COMPONENTS = new ArrayList<>();
 	private static final List<Identifier> AFF_BUTTON_KEYS = ImmutableList.of(SpellConfig.affinityToId(Affinity.FIRE),SpellConfig.affinityToId(Affinity.WIND),SpellConfig.affinityToId(Affinity.EARTH),SpellConfig.affinityToId(Affinity.WATER));
@@ -63,11 +66,10 @@ public class MagicDetailsPageLayer extends PageLayer {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		matrices.push();
 		matrices.scale(scaleX.get(), scaleY.get(), scaleZ);
+
+
 		
 		COMPONENTS.forEach(component -> component.renderText(this.client.player, matrices, this.textRenderer, this.x, this.y, scaleX.get(), scaleY.get()));
-		
-		this.textRenderer.draw(matrices, Text.translatable("endallmagic.gui.page.attributes.text.details").formatted(Formatting.DARK_GRAY), (this.x + 105) / scaleX.get(), (this.y + 26) / scaleY.get(), 4210752);
-		this.textRenderer.draw(matrices, Text.translatable("endallmagic.gui.page.attributes.text.details").formatted(Formatting.DARK_GRAY), (this.x + 105) / scaleX.get(), (this.y + 81) / scaleY.get(), 4210752);
 		
 		matrices.pop();
 		
@@ -76,12 +78,9 @@ public class MagicDetailsPageLayer extends PageLayer {
 	
 	@Override
 	public void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-		RenderSystem.setShaderTexture(0, EndAllMagicClient.GUI);
-		this.drawTexture(matrices, this.x + 9, this.y + 35, 226, 0, 9, 9);
-		this.drawTexture(matrices, this.x + 9, this.y + 123, 235, 0, 9, 9);
-		this.drawTexture(matrices, this.x + 93, this.y + 24, 226, 9, 9, 9);
-		this.drawTexture(matrices, this.x + 93, this.y + 79, 235, 9, 9, 9);
-			
+		RenderSystem.setShaderTexture(0, EndAllMagicClient.MDT);
+		this.drawTexture(matrices, this.x + 18, this.y + 35, 744+xOffset, 583+yOffset, backgroundWidth,backgroundHeight);
+
 		if(((MagicUser)this.client.player).getAffinity() == SpellConfig.Affinity.NONE){
 			RenderSystem.setShaderTexture(0, EndAllMagicClient.NO_AFF_BACKGROUND);
 			this.drawTexture(matrices, x+18, y+40, 0, 0, 157, 49);
@@ -92,6 +91,16 @@ public class MagicDetailsPageLayer extends PageLayer {
 				button.active = true;
 			}
 		});
+	}
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+		EndAllMagic.LOGGER.info("dragged");
+		xOffset+=deltaX;
+		xOffset = MathHelper.clamp(xOffset, -500, 500);
+		yOffset+=deltaY;
+		yOffset = MathHelper.clamp(yOffset, -500, 500);
+		EndAllMagic.LOGGER.info(xOffset +" "+  yOffset);
+		return true;
 	}
 	
 	@Override
@@ -112,5 +121,7 @@ public class MagicDetailsPageLayer extends PageLayer {
 		AFF_BUTTONS.forEach(this::remove);
 		init();
 		// switch screen
+	}
+	static{
 	}
 }

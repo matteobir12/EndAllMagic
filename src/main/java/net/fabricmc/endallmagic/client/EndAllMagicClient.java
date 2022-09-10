@@ -31,6 +31,7 @@ import net.minecraft.util.Identifier;
 
 public class EndAllMagicClient implements ClientModInitializer {
 	public static final Identifier GUI = new Identifier(EndAllMagic.MOD_ID, "textures/gui/gui.png");
+	public static final Identifier MDT = new Identifier(EndAllMagic.MOD_ID, "textures/gui/magic_details_tree.png");
 	public static final Identifier NO_AFF_BACKGROUND = new Identifier(EndAllMagic.MOD_ID, "textures/gui/pick_affinity_background.png");
 	public static final Identifier MAGIC_DETAILS = new Identifier(EndAllMagic.MOD_ID, "details");
 	public static final Identifier INNATE_ABLILITIES = new Identifier(EndAllMagic.MOD_ID, "abilities");

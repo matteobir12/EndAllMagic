@@ -23,12 +23,10 @@ import net.fabricmc.endallmagic.common.network.ClientNetworking;
 import net.fabricmc.endallmagic.common.spells.Pattern;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellConfig;
-import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
 
 @Mixin(MinecraftClient.class)
 public class ClientMixin implements ClientUtils {
 	@Unique private int timer = 0;
-	@Unique private Affinity affinity = Affinity.NONE;
 	@Unique private final java.util.List<Pattern> pattern = new java.util.ArrayList<>(8);
 	@Shadow	@Nullable public ClientPlayerEntity player;
 
