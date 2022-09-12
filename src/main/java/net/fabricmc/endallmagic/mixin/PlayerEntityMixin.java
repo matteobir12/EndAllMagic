@@ -1,6 +1,5 @@
 package net.fabricmc.endallmagic.mixin;
 
-import net.fabricmc.api.EnvType;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.network.ServerNetworking;
@@ -9,7 +8,6 @@ import net.fabricmc.endallmagic.common.spells.SpellConfig;
 import net.fabricmc.endallmagic.common.spells.SpellTree;
 import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
 import net.fabricmc.fabric.api.util.NbtType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,18 +29,21 @@ import static net.fabricmc.endallmagic.EndAllMagic.DataTrackers.*;
 import static net.fabricmc.endallmagic.EndAllMagic.EntityAttributes.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements MagicUser {
 	@Shadow public abstract void sendMessage(Text message, boolean actionBar);
 
-	// @Shadow protected HungerManager hungerManager;
 	@Unique private final SpellTree knownSpells = new SpellTree();
 	@Unique private Spell activeSpell = null;
 	@Unique private long lastCastTime = 0;
 	@Unique private int spellTimer = 0;
 	@Unique private int manaRegenTimer=50;
+	@Unique private Map<Spell,OnTick> onTicks = new HashMap<>();
 	@Unique private final List<Entity> hasHit = new ArrayList<>();
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -74,6 +75,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 					addMana(1);
 
 			}
+
+			Iterator<OnTick> i = onTicks.values().iterator();
+			while(i.hasNext())
+				if (i.next().tick()){
+					i.remove();
+					EndAllMagic.LOGGER.info("stoppin");
+				}
+						
+			
 		}
 	}
 
@@ -185,12 +195,24 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Override
 	public void setAffinity(Affinity affinity) {
 		dataTracker.set(AFFINITY, affinity.ordinal());
-		
-		
 	}
 	@Override
 	public Affinity getAffinity() {
 		return SpellConfig.Affinity.values()[dataTracker.get(AFFINITY)];
+	}
+	@Override
+	public void addOnTick(Spell s, OnTick t) {
+		onTicks.put(s, t);
+		
+	}
+	@Override
+	public void removeOnTick(Spell s) {
+		onTicks.remove(s);
+		
+	}
+	@Override
+	public boolean onTickEnabled(Spell s) {
+		return onTicks.containsKey(s);
 	}
 
 }

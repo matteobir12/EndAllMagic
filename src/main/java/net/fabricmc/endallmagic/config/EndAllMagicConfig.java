@@ -41,17 +41,17 @@ public class EndAllMagicConfig implements ConfigData {
 		@Comment("Should Dream Warp be enabled? (Restart Required)")
 		public boolean enableDreamWarp = true;
 
-		@Comment("Should Magic Missile be enabled? (Restart Required)")
+		@Comment("Should Fire Ball be enabled? (Restart Required)")
 		public boolean enableFireBall = true;
 
-		@Comment("Should Wind Blade Shock be enabled? (Restart Required)")
+		@Comment("Should Wind Blade be enabled? (Restart Required)")
 		public boolean enableWindBlade = true;
 
 		@Comment("Should Heal be enabled? (Restart Required)")
 		public boolean enableHeal = true;
 
-		@Comment("Should Discombobulate be enabled? (Restart Required)")
-		public boolean enableDiscombobulate = true;
+		@Comment("Should Wind Speed be enabled? (Restart Required)")
+		public boolean enableWindSpeed = true;
 
 		@Comment("Should Solar Strike be enabled? (Restart Required)")
 		public boolean enableSolarStrike = true;

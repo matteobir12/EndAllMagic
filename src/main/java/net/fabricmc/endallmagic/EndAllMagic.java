@@ -9,11 +9,8 @@ import net.fabricmc.endallmagic.common.entities.ModEntities;
 import net.fabricmc.endallmagic.common.network.ServerNetworking;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
 import net.fabricmc.endallmagic.common.sounds.ModSoundEvents;
-import net.fabricmc.endallmagic.common.spells.FireBall;
-import net.fabricmc.endallmagic.common.spells.HealSpell;
 import net.fabricmc.endallmagic.common.spells.Spell;
 import net.fabricmc.endallmagic.common.spells.SpellConfig;
-import net.fabricmc.endallmagic.common.spells.WindBladeSpell;
 import net.fabricmc.endallmagic.config.EndAllMagicConfig;
 import net.fabricmc.endallmagic.items.Staff;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -21,7 +18,6 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.data.DataTracker;
@@ -34,9 +30,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.minecraft.client.MinecraftClient;
+import org.slf4j.LoggerFactory; 
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;

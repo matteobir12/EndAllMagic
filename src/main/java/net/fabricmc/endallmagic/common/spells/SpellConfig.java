@@ -19,6 +19,7 @@ public class SpellConfig {
     public static final Spell FIREBALL;
 	public static final Spell HEAL;
 	public static final Spell WINDBLADE;
+	public static final Spell WINDSPEED;
 
     public enum Affinity {
 		FIRE {
@@ -67,6 +68,7 @@ public class SpellConfig {
 		FIREBALL = new FireBall(); // use config constuctor and link to config
 		HEAL = new HealSpell();
 		WINDBLADE = new WindBladeSpell();
+		WINDSPEED = new WindSpeed();
     }
 
     public static void register() {
@@ -81,6 +83,10 @@ public class SpellConfig {
 		if(EndAllMagic.getConfig().spells.enableWindBlade){
 			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "wind_blade"), WINDBLADE);
 			ENABLED_SPELLS.addSpell(WINDBLADE);
+		}
+		if(EndAllMagic.getConfig().spells.enableWindSpeed){
+			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "wind_speed"), WINDSPEED);
+			ENABLED_SPELLS.addSpell(WINDSPEED);
 		}
 	}
 

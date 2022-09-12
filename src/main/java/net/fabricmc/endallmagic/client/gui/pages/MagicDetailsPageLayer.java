@@ -34,8 +34,8 @@ public class MagicDetailsPageLayer extends PageLayer {
 	private static Supplier<Float> scaleX = () -> EndAllMagic.getConfig().textScaleX();
 	private static Supplier<Float> scaleY = () -> EndAllMagic.getConfig().textScaleY();
 	private static float scaleZ = 0.75F;
-	private int xOffset = 0;
-	private int yOffset = 0;
+	private int xOffset = 210;
+	private int yOffset = 210;
 	
 	private static final List<RenderComponent> COMPONENTS = new ArrayList<>();
 	private static final List<Identifier> AFF_BUTTON_KEYS = ImmutableList.of(SpellConfig.affinityToId(Affinity.FIRE),SpellConfig.affinityToId(Affinity.WIND),SpellConfig.affinityToId(Affinity.EARTH),SpellConfig.affinityToId(Affinity.WATER));
@@ -78,8 +78,24 @@ public class MagicDetailsPageLayer extends PageLayer {
 	
 	@Override
 	public void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-		RenderSystem.setShaderTexture(0, EndAllMagicClient.MDT);
-		this.drawTexture(matrices, this.x + 18, this.y + 35, 744+xOffset, 583+yOffset, backgroundWidth,backgroundHeight);
+		if (xOffset < 256 && yOffset < 256){
+			RenderSystem.setShaderTexture(0, EndAllMagicClient.MDTA);
+			this.drawTexture(matrices, this.x + 7, this.y + 7, xOffset, yOffset, 255-xOffset > 163 ? 163: 255-xOffset, 255-yOffset>153 ? 153 : 255-yOffset);
+		}
+		if (xOffset+163 > 255 && yOffset < 256){
+			RenderSystem.setShaderTexture(0, EndAllMagicClient.MDTB);
+			this.drawTexture(matrices, this.x + 7 + 255-xOffset, this.y + 7, xOffset<163?0:163-xOffset, yOffset, 255-xOffset > 163 ? 163: 255-xOffset,backgroundHeight);
+		}
+		if (xOffset < 256 && yOffset+153 > 255){
+			RenderSystem.setShaderTexture(0, EndAllMagicClient.MDTC);
+			this.drawTexture(matrices, this.x + 18, this.y + 35, xOffset, yOffset, backgroundWidth,backgroundHeight);
+		}
+		if (xOffset+163 > 255&& yOffset+153 > 255){
+			RenderSystem.setShaderTexture(0, EndAllMagicClient.MDTD);
+			this.drawTexture(matrices, this.x + 18, this.y + 35, xOffset, yOffset, backgroundWidth,backgroundHeight);
+		}
+
+
 
 		if(((MagicUser)this.client.player).getAffinity() == SpellConfig.Affinity.NONE){
 			RenderSystem.setShaderTexture(0, EndAllMagicClient.NO_AFF_BACKGROUND);
@@ -96,9 +112,9 @@ public class MagicDetailsPageLayer extends PageLayer {
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
 		EndAllMagic.LOGGER.info("dragged");
 		xOffset+=deltaX;
-		xOffset = MathHelper.clamp(xOffset, -500, 500);
+		xOffset = MathHelper.clamp(xOffset, 0, 512-163);
 		yOffset+=deltaY;
-		yOffset = MathHelper.clamp(yOffset, -500, 500);
+		yOffset = MathHelper.clamp(yOffset, 0, 512-153);
 		EndAllMagic.LOGGER.info(xOffset +" "+  yOffset);
 		return true;
 	}

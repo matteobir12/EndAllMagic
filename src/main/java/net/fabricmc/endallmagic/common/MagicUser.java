@@ -40,4 +40,16 @@ public interface MagicUser {
 	void setLastCastTime(long lastCastTime);
 
 	void setActiveSpell(Spell spell, int timer);
+
+	void addOnTick(Spell s, OnTick t);
+
+	void removeOnTick(Spell s);
+
+	boolean onTickEnabled(Spell s);
+
+	interface OnTick {
+		// true if it should be removed
+        boolean tick();
+    }
+
 }
