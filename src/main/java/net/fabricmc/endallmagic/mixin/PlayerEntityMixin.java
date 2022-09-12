@@ -10,6 +10,7 @@ import net.fabricmc.endallmagic.common.spells.SpellConfig.Affinity;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -18,13 +19,18 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+
+import org.apache.commons.lang3.ObjectUtils.Null;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
 import static net.fabricmc.endallmagic.EndAllMagic.DataTrackers.*;
 import static net.fabricmc.endallmagic.EndAllMagic.EntityAttributes.*;
 
@@ -42,7 +48,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Unique private Spell activeSpell = null;
 	@Unique private long lastCastTime = 0;
 	@Unique private int spellTimer = 0;
-	@Unique private int manaRegenTimer=50;
+	@Unique private int manaRegenTimer=120;
+	@Unique private boolean mitigateFireDamage=true;
 	@Unique private Map<Spell,OnTick> onTicks = new HashMap<>();
 	@Unique private final List<Entity> hasHit = new ArrayList<>();
 
@@ -63,6 +70,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 
 			if(activeSpell != null) {
 				activeSpell.attemptCast(this,world);
+				activeSpell = null;
 			}
 
 			if(spellTimer-- <= 0)
@@ -71,7 +79,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 			if(world.getTime() >= lastCastTime + 20) {
 				int manaCooldown = getManaRegenTimer();
 
-				if(getCurrentMana() < getMaxMana() && world.getTime() % manaCooldown == 0)
+				if(getCurrentMana() < getMaxMana() && world.getTime() % (manaCooldown/getLevel()) == 0)
 					addMana(1);
 
 			}
@@ -130,7 +138,21 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		dataTracker.startTracking(AFFINITY, SpellConfig.Affinity.NONE.ordinal());
 		
 	}
-
+	@Inject(method = "damage()Z", at = @At("TAIL"), cancellable = true)
+	public void damageInject(DamageSource source, float amount,CallbackInfoReturnable<Boolean> cir) {
+		if(mitigateFireDamage && source.isFire()){
+			if (amount > getCurrentMana() && getCurrentMana() > 0){
+				Float newDmg = amount-getCurrentMana();
+				setMana(0);
+				damage(source, newDmg);
+				sendMessage(Text.translatable("error." + EndAllMagic.MOD_ID + ".not_enough_mana"));
+				cir.setReturnValue(false);
+			}else{
+				setMana((int)(getCurrentMana()-amount));
+				cir.setReturnValue(false);
+			}
+		}
+	}
 	@Override
 	public SpellTree getKnownSpells() {
 		return knownSpells;
@@ -213,6 +235,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Override
 	public boolean onTickEnabled(Spell s) {
 		return onTicks.containsKey(s);
+	}
+	@Override
+	public void toggleManaFireRes() {
+		mitigateFireDamage = !mitigateFireDamage;
 	}
 
 }

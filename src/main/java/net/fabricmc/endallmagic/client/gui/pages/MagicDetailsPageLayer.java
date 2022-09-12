@@ -84,11 +84,11 @@ public class MagicDetailsPageLayer extends PageLayer {
 		}
 		if (xOffset+163 > 255 && yOffset < 256){
 			RenderSystem.setShaderTexture(0, EndAllMagicClient.MDTB);
-			this.drawTexture(matrices, this.x + 7 + 255-xOffset, this.y + 7, xOffset<163?0:163-xOffset, yOffset, 255-xOffset > 163 ? 163: 255-xOffset,backgroundHeight);
+			this.drawTexture(matrices, this.x + 7 + xOffset -256, this.y + 7, xOffset<163?0:163-xOffset, yOffset, xOffset -256 > 163 ? 163: xOffset -256,255-yOffset>153 ? 153 : 255-yOffset);
 		}
 		if (xOffset < 256 && yOffset+153 > 255){
 			RenderSystem.setShaderTexture(0, EndAllMagicClient.MDTC);
-			this.drawTexture(matrices, this.x + 18, this.y + 35, xOffset, yOffset, backgroundWidth,backgroundHeight);
+			this.drawTexture(matrices, this.x + 7, this.y + 7 + yOffset -256, xOffset, yOffset-256>153?yOffset-256-153:0, backgroundWidth,backgroundHeight);
 		}
 		if (xOffset+163 > 255&& yOffset+153 > 255){
 			RenderSystem.setShaderTexture(0, EndAllMagicClient.MDTD);

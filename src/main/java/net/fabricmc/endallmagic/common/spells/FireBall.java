@@ -38,6 +38,5 @@ public class FireBall extends Spell {
 
         world.spawnEntity(fireBall);
         world.playSound(null, entity.getBlockPos(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 2F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
-        entity.setActiveSpell(null, 0);
     }
 }

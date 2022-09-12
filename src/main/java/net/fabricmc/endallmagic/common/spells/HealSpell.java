@@ -29,6 +29,5 @@ public class HealSpell extends Spell {
 
 			((ServerWorld) world).spawnParticles((ParticleEffect) ModParticles.HEAL, entity.getX() + offsetX, entity.getY() - 0.5 + offsetY, entity.getZ() + offsetZ, 1, 0, 0, 0, 0);
 		}
-        entity.setActiveSpell(null, 0);
     }
 }

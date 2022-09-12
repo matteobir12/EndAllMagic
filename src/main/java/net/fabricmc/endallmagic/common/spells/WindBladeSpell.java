@@ -38,7 +38,5 @@ public class WindBladeSpell extends Spell {
 
 		world.spawnEntity(windBlade);
 		world.playSound(null,entity.getBlockPos(), ModSoundEvents.WIND_BLADE, SoundCategory.PLAYERS, 2F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
-
-        entity.setActiveSpell(null, 0);
     }
 }

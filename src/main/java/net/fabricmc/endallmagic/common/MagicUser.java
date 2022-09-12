@@ -52,4 +52,6 @@ public interface MagicUser {
         boolean tick();
     }
 
+	void toggleManaFireRes();
+
 }

@@ -55,7 +55,6 @@ public class WindSpeed extends Spell {
         } else {
             entity.removeOnTick(this);
         }
-        entity.setActiveSpell(null, 0);
     }
 
 }
