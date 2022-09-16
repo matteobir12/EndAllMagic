@@ -20,7 +20,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,7 +28,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import static net.fabricmc.endallmagic.EndAllMagic.DataTrackers.*;
 import static net.fabricmc.endallmagic.EndAllMagic.EntityAttributes.*;
@@ -49,7 +47,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Unique private long lastCastTime = 0;
 	@Unique private int spellTimer = 0;
 	@Unique private int manaRegenTimer=120;
-	@Unique private boolean mitigateFireDamage=true;
+	@Unique private boolean mitigateFireDamage=false;
 	@Unique private Map<Spell,OnTick> onTicks = new HashMap<>();
 	@Unique private final List<Entity> hasHit = new ArrayList<>();
 
@@ -138,20 +136,21 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		dataTracker.startTracking(AFFINITY, SpellConfig.Affinity.NONE.ordinal());
 		
 	}
-	@Inject(method = "damage()Z", at = @At("TAIL"), cancellable = true)
-	public void damageInject(DamageSource source, float amount,CallbackInfoReturnable<Boolean> cir) {
-		if(mitigateFireDamage && source.isFire()){
-			if (amount > getCurrentMana() && getCurrentMana() > 0){
+
+	@ModifyVariable(method = "applyDamage", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/entity/player/PlayerEntity;getHealth()F"), ordinal = 0, argsOnly = true)
+	private float modifyDamage(float amount, DamageSource source) {
+		if (!world.isClient && getCurrentMana() > 0 && mitigateFireDamage && source.isFire()) {
+			if (amount > getCurrentMana()){
 				Float newDmg = amount-getCurrentMana();
 				setMana(0);
-				damage(source, newDmg);
 				sendMessage(Text.translatable("error." + EndAllMagic.MOD_ID + ".not_enough_mana"));
-				cir.setReturnValue(false);
+				return newDmg;
 			}else{
 				setMana((int)(getCurrentMana()-amount));
-				cir.setReturnValue(false);
+				return 0;
 			}
 		}
+		return amount;
 	}
 	@Override
 	public SpellTree getKnownSpells() {

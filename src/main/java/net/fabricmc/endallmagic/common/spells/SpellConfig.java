@@ -15,11 +15,13 @@ public class SpellConfig {
     public static final java.util.List<Pattern> WATER_PATTERN = new java.util.ArrayList<>(2);
     public static final java.util.List<Pattern> EARTH_PATTERN = new java.util.ArrayList<>(2);
     public static final java.util.List<Pattern> WIND_PATTERN = new java.util.ArrayList<>(2);
+	
 
     public static final Spell FIREBALL;
 	public static final Spell HEAL;
 	public static final Spell WINDBLADE;
 	public static final Spell WINDSPEED;
+	public static final Spell FIRERESIST;
 
     public enum Affinity {
 		FIRE {
@@ -69,6 +71,7 @@ public class SpellConfig {
 		HEAL = new HealSpell();
 		WINDBLADE = new WindBladeSpell();
 		WINDSPEED = new WindSpeed();
+		FIRERESIST = new FireResistSpell();
     }
 
     public static void register() {
@@ -86,6 +89,10 @@ public class SpellConfig {
 		}
 		if(EndAllMagic.getConfig().spells.enableWindSpeed){
 			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "wind_speed"), WINDSPEED);
+			ENABLED_SPELLS.addSpell(WINDSPEED);
+		}
+		if(EndAllMagic.getConfig().spells.enableFireResistSpell){
+			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "fire_resist"), FIRERESIST);
 			ENABLED_SPELLS.addSpell(WINDSPEED);
 		}
 	}

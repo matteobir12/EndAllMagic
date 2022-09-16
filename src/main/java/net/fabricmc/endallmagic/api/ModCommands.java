@@ -38,7 +38,7 @@ public class ModCommands {
 	}
 
 	public static void init(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess access, CommandManager.RegistrationEnvironment environment) {
-		dispatcher.register(CommandManager.literal("eom")
+		dispatcher.register(CommandManager.literal("eam")
 				.then(CommandManager.literal("list").requires(source -> source.hasPermissionLevel(0))
 						.executes(context -> SpellsCommand.listPlayerSpells(context, context.getSource().getPlayer()))
 						.then(CommandManager.argument("player", EntityArgumentType.player()).requires(source -> source.hasPermissionLevel(3))
@@ -74,7 +74,12 @@ public class ModCommands {
 								.then(CommandManager.argument("player", EntityArgumentType.player())
 										.executes(context -> SpellsCommand.setPlayerAffinity(context, EntityArgumentType.getPlayer(context, "player"),IntegerArgumentType.getInteger(context, "set")))))
 						.then(CommandManager.literal("show")
-								.executes(SpellsCommand::showAffinity))));
+								.executes(SpellsCommand::showAffinity)))
+				.then(CommandManager.literal("mana").requires(source -> source.hasPermissionLevel(3))
+								.then(CommandManager.argument("set", IntegerArgumentType.integer())
+										.executes(context -> SpellsCommand.setPlayerMana(context, context.getSource().getPlayer(),IntegerArgumentType.getInteger(context, "set")))
+										.then(CommandManager.argument("player", EntityArgumentType.player())
+												.executes(context -> SpellsCommand.setPlayerMana(context, EntityArgumentType.getPlayer(context, "player"),IntegerArgumentType.getInteger(context, "set")))))));
 	}
 
 	public static class SpellArgumentType implements ArgumentType<Spell> {
@@ -240,6 +245,15 @@ public class ModCommands {
 				return Command.SINGLE_SUCCESS;
 			}
 			user.setLevel(level);
+			return Command.SINGLE_SUCCESS;
+		}
+		public static int setPlayerMana(CommandContext<ServerCommandSource> context, PlayerEntity player, int mana) throws CommandSyntaxException {
+			MagicUser user = (MagicUser) player;
+			if(mana<0){
+				context.getSource().sendError(Text.translatable("commands." + EndAllMagic.MOD_ID + ".int_not_in_range"));
+				return Command.SINGLE_SUCCESS;
+			}
+			user.setMana(mana);
 			return Command.SINGLE_SUCCESS;
 		}
 		public static int setPlayerAffinity(CommandContext<ServerCommandSource> context, PlayerEntity player, int affinity) throws CommandSyntaxException {

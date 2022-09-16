@@ -53,8 +53,8 @@ public class EndAllMagicConfig implements ConfigData {
 		@Comment("Should Wind Speed be enabled? (Restart Required)")
 		public boolean enableWindSpeed = true;
 
-		@Comment("Should Solar Strike be enabled? (Restart Required)")
-		public boolean enableSolarStrike = true;
+		@Comment("Should the fire resist spell be enabled? (Restart Required)")
+		public boolean enableFireResistSpell = true;
 
 		@Comment("Should Arcane Barrier be enabled? (Restart Required)")
 		public boolean enableArcaneBarrier = true;

@@ -44,6 +44,11 @@ public abstract class PageLayer extends HandledScreen<ScreenHandler> {
 	 */
 	@Override
 	public void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {}
+
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+		return true;
+	}
 	
 	@FunctionalInterface
 	public interface Builder {
