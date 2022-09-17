@@ -1,8 +1,11 @@
 package net.fabricmc.endallmagic.common.entities;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
-
+import com.google.common.collect.Maps;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.ModDamageSource;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
@@ -13,6 +16,7 @@ import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -25,13 +29,10 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.hit.HitResult.Type;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 public class TornadoEntity extends Entity {
@@ -43,12 +44,13 @@ public class TornadoEntity extends Entity {
     @Nullable 
     private Entity owner;
 	private float damage;
-
+    private int damageDelay;
+    private final Map<Entity, Integer> affectedEntities = Maps.newHashMap();
 
     protected TornadoEntity(EntityType<? extends TornadoEntity> entityType, World world) {
         super(entityType, world);
         EndAllMagic.LOGGER.info("creating");
-		setNoGravity(true);
+        this.setNoGravity(true);
 		if (damage == 0) damage = 0.5F;
     }
 
@@ -58,18 +60,20 @@ public class TornadoEntity extends Entity {
     }
 
     public TornadoEntity(LivingEntity owner, World world,float damage) {
-        this(ModEntities.TORNADO_ENTITY, owner.getX(), owner.getEyeY() - 0.1f, owner.getZ(), world);
+        this(ModEntities.TORNADO_ENTITY, owner.getX(), owner.getY(), owner.getZ(), world);
 		this.damage = damage;
 		this.owner = owner;
 		ownerUuid = owner.getUuid();
 		
 	}
 
-	protected void onEntityHit(EntityHitResult entityHitResult) {
-        entityHitResult.getEntity().setNoGravity(true);
-		entityHitResult.getEntity().addVelocity(getVelocity().x, .6, getVelocity().y);
-        entityHitResult.getEntity().damage(ModDamageSource.TORNADO_SOURCE, damage);
-		if(entityHitResult.getEntity() instanceof LivingEntity target)
+
+
+	protected void onEntityHit(Entity entityHit) {
+        entityHit.setNoGravity(true);
+		entityHit.addVelocity(getVelocity().x/2, .5, getVelocity().y/2);
+        entityHit.damage(ModDamageSource.TORNADO_SOURCE, damage);
+		if(entityHit instanceof LivingEntity target)
 			target.timeUntilRegen = 0;
 	}
 
@@ -84,7 +88,7 @@ public class TornadoEntity extends Entity {
     }
 	@Override
     public Packet<?> createSpawnPacket() {
-        Entity entity = owner;
+        Entity entity = this.getOwner();
         return new EntitySpawnS2CPacket(this, entity == null ? 0 : entity.getId());
     }
 
@@ -99,7 +103,6 @@ public class TornadoEntity extends Entity {
 
 	@Override
     public void tick() {
-        BlockPos blockPos;
         super.tick();
         Vec3d velocityVec = this.getVelocity();
         if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
@@ -109,35 +112,9 @@ public class TornadoEntity extends Entity {
             this.prevYaw = this.getYaw();
             this.prevPitch = this.getPitch();
         }
-		blockPos = this.getBlockPos();
         
         Vec3d oldPositionVec = this.getPos();
-        Vec3d newPositionVec;
-        HitResult hitResult = this.world.raycast(new RaycastContext(oldPositionVec, newPositionVec = oldPositionVec.add(velocityVec), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this));
-        if (hitResult.getType() != HitResult.Type.MISS) {
-            newPositionVec = hitResult.getPos();
-        }
-        while (!this.isRemoved()) {
-            EntityHitResult entityHitResult = this.getEntityCollision(oldPositionVec, newPositionVec);
-            if (entityHitResult != null) {
-                hitResult = entityHitResult;
-            }
-            if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
-                Entity entity = ((EntityHitResult)hitResult).getEntity();
-                if (entity instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity)owner).shouldDamagePlayer((PlayerEntity)entity)) {
-                    hitResult = null;
-                    entityHitResult = null;
-                }
-            }
-            if (hitResult != null) {
-                if (hitResult.getType() == Type.ENTITY) {
-                    onEntityHit((EntityHitResult)hitResult);
-                }
-                this.velocityDirty = true;
-            }
-            if (entityHitResult == null) break;
-            hitResult = null;
-        }
+        Vec3d newPositionVec = oldPositionVec.add(velocityVec);
         velocityVec = this.getVelocity();
         double l = velocityVec.horizontalLength();
         this.setYaw((float)(MathHelper.atan2(velocityVec.x, velocityVec.z) * 57.2957763671875));
@@ -153,11 +130,36 @@ public class TornadoEntity extends Entity {
         for (BlockPos bpos : BlockPos.iterate(MathHelper.floor(box.minX), MathHelper.floor(box.minY), MathHelper.floor(box.minZ), MathHelper.floor(box.maxX), MathHelper.floor(box.maxY), MathHelper.floor(box.maxZ))) {
             BlockState state = this.world.getBlockState(bpos);
             Block block = state.getBlock();
-            if (!(block instanceof LeavesBlock)) continue;
-            this.world.breakBlock(blockPos, true, this);
+            if (block instanceof LeavesBlock) {
+                this.world.breakBlock(bpos, true, this);
+                continue;
+            }
+            if (!state.isAir()) {
+                if (bpos.getY()<=box.minY+1){
+                    this.setPos(this.getX(), bpos.getY()+1, this.getZ());
+                }else{
+                    discard();
+                }
+            }
         }
-		
+        this.affectedEntities.entrySet().removeIf(entry -> this.age >= entry.getValue());
+        List<LivingEntity> list2 = this.world.getNonSpectatingEntities(LivingEntity.class, this.getBoundingBox());
+        Set<Entity> entitiesNotInTornado = affectedEntities.keySet();
+        for (LivingEntity livingEntity : list2) {
+            // double r;
+            // double q;
+            // double s;
+            // float f = this.getRadius();
+            // !((s = (q = livingEntity.getX() - this.getX()) * q + (r = livingEntity.getZ() - this.getZ()) * r) <= (double)(f * f)) 
+            if (this.affectedEntities.containsKey(livingEntity)) {
+                entitiesNotInTornado.remove(livingEntity);
+                continue;
+            }
+            this.affectedEntities.put(livingEntity, this.age + this.damageDelay);
+            this.onEntityHit(livingEntity);
 
+        }
+        entitiesNotInTornado.forEach(e->e.setNoGravity(false));
 		if(!world.isClient()) {
 			for(int count = 0; count < 32; count++) {
 				double x = getX() + (world.random.nextInt(9) - 1) / 8D;
@@ -174,6 +176,15 @@ public class TornadoEntity extends Entity {
 		if(age > 40)
 			kill();
 
+    }
+
+    @Nullable
+    public Entity getOwner() {
+        Entity entity;
+        if (this.owner == null && this.ownerUuid != null && this.world instanceof ServerWorld && (entity = ((ServerWorld)this.world).getEntity(this.ownerUuid)) instanceof Entity) {
+            this.owner = entity;
+        }
+        return this.owner;
     }
 
     @Override
@@ -193,7 +204,7 @@ public class TornadoEntity extends Entity {
         if (entity.isSpectator() || !entity.isAlive() || !entity.canHit()) {
             return false;
         }
-        Entity entity2 = owner;
+        Entity entity2 = this.getOwner();
         return entity2 == null || !entity2.isConnectedThroughVehicle(entity);
     }
 
@@ -210,7 +221,7 @@ public class TornadoEntity extends Entity {
 	}
 
     protected boolean isOwner(Entity entity) {
-        return entity.getUuid().equals(owner.getUuid());
+        return entity.getUuid().equals(this.getOwner().getUuid());
     }
 
     @Override
@@ -224,4 +235,8 @@ public class TornadoEntity extends Entity {
 		return ItemStack.EMPTY;
 	}
     
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        return false;
+    }
 }

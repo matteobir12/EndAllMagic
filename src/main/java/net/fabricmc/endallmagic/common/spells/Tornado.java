@@ -2,6 +2,7 @@ package net.fabricmc.endallmagic.common.spells;
 
 import java.util.Arrays;
 
+import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.entities.TornadoEntity;
 import net.fabricmc.endallmagic.common.sounds.ModSoundEvents;
@@ -32,7 +33,7 @@ public class Tornado extends Spell {
     }
     public <T extends LivingEntity & MagicUser> void attemptCast(T entity, World world) {
         Vec3d rotation = entity.getRotationVec(1F);
-        rotation.normalize().multiply(1.5F);
+        rotation = rotation.normalize().multiply(.5F);
         TornadoEntity tornado = new TornadoEntity(entity,world,damage);
         tornado.setVelocity(rotation.x,rotation.y,rotation.z);
         world.spawnEntity(tornado);
