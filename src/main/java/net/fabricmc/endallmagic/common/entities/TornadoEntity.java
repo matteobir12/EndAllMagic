@@ -52,19 +52,23 @@ public class TornadoEntity extends Entity {
     private final Map<Entity, Integer> affectedEntities = Maps.newHashMap();
 
     protected TornadoEntity(EntityType<? extends TornadoEntity> entityType, World world) {
-        super(entityType, world);
+        super(entityType, world); 
         EndAllMagic.LOGGER.info("creating");
         this.setNoGravity(true);
 		if (damage == 0) damage = 0.5F;
     }
-
-    protected TornadoEntity(EntityType<? extends TornadoEntity> type, double x, double y, double z, World world) {
-        this(type, world);
+    public TornadoEntity(LivingEntity owner, double x, double y, double z, World world, float damage) {
+        this(ModEntities.TORNADO_ENTITY, world);
         this.setPosition(x, y, z);
+        this.damage = damage;
+		this.owner = owner;
+		ownerUuid = owner.getUuid();
     }
-
-    public TornadoEntity(LivingEntity owner, World world,float damage) {
-        this(ModEntities.TORNADO_ENTITY, owner.getX(), owner.getY(), owner.getZ(), world);
+    public TornadoEntity(LivingEntity owner, World world, float damage) {
+        this(ModEntities.TORNADO_ENTITY, world);
+        Vec3d rotation = owner.getRotationVec(1F);
+        rotation = rotation.normalize().multiply(1.5F);
+        this.setPosition(owner.getX()+rotation.x, owner.getY(), owner.getZ()+rotation.z);
 		this.damage = damage;
 		this.owner = owner;
 		ownerUuid = owner.getUuid();
@@ -159,7 +163,7 @@ public class TornadoEntity extends Entity {
                 continue;
             }
             if (!state.isAir()) {
-                if (bpos.getY()<=box.minY+1){
+                if (bpos.getY()<=box.minY+2){
                     this.setPos(this.getX(), bpos.getY()+1, this.getZ());
                 }else{
                     discard();

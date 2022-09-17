@@ -11,6 +11,8 @@ import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -156,12 +158,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 				Float newDmg = amount-getCurrentMana();
 				setMana(0);
 				sendMessage(Text.translatable("error." + EndAllMagic.MOD_ID + ".not_enough_mana"));
+				cancelChannel();
 				return newDmg;
 			}else{
 				setMana((int)(getCurrentMana()-amount));
 				return 0;
 			}
 		}
+		cancelChannel();
 		return amount;
 	}
 	@Override
@@ -256,8 +260,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	public void channelSpell(int timer, OnTick spell) {
 		channelSpellTimer = timer;
 		channeledSpell = spell;
-
+		addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, timer, 3));
 		
+	}
+	public void cancelChannel(){
+		sendMessage(Text.translatable("error." + EndAllMagic.MOD_ID + ".channel_cancelled"));
+		channelSpellTimer = 0;
+		channeledSpell = null;
 	}
 
 
