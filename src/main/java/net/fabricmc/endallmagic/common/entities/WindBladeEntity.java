@@ -1,6 +1,7 @@
 package net.fabricmc.endallmagic.common.entities;
 
 
+import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.EntityType;
@@ -52,8 +53,10 @@ public class WindBladeEntity extends PersistentProjectileEntity {
 			}
 		}
 
-		if(age > 40)
+		if(age > 40){
 			kill();
+			EndAllMagic.LOGGER.info("killlin");
+		}
 	}
 
 	@Override

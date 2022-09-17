@@ -23,7 +23,12 @@ public class ModEntities {
 					.dimensions(EntityDimensions.fixed(0.5F, 0.5F))
 					.trackRangeChunks(64)
 					.build());
-
+	public static final EntityType<TornadoEntity> TORNADO_ENTITY = create("tornado",
+			FabricEntityTypeBuilder.<TornadoEntity>create(SpawnGroup.MISC, TornadoEntity::new)
+					.dimensions(EntityDimensions.fixed(2F, 6F))
+					.trackRangeChunks(64)
+					.build());
+					
 	//-----Registry-----//
 	public static void register() {
 		ENTITIES.keySet().forEach(entityType -> Registry.register(Registry.ENTITY_TYPE, ENTITIES.get(entityType), entityType));

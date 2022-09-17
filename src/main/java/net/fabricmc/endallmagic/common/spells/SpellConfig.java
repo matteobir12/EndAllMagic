@@ -22,6 +22,7 @@ public class SpellConfig {
 	public static final Spell WINDBLADE;
 	public static final Spell WINDSPEED;
 	public static final Spell FIRERESIST;
+	public static final Spell TORNADO;
 
     public enum Affinity {
 		FIRE {
@@ -72,6 +73,7 @@ public class SpellConfig {
 		WINDBLADE = new WindBladeSpell();
 		WINDSPEED = new WindSpeed();
 		FIRERESIST = new FireResistSpell();
+		TORNADO = new Tornado();
     }
 
     public static void register() {
@@ -93,7 +95,11 @@ public class SpellConfig {
 		}
 		if(EndAllMagic.getConfig().spells.enableFireResistSpell){
 			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "fire_resist"), FIRERESIST);
-			ENABLED_SPELLS.addSpell(WINDSPEED);
+			ENABLED_SPELLS.addSpell(FIRERESIST);
+		}
+		if(EndAllMagic.getConfig().spells.enableTornado){
+			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "tornado"), TORNADO);
+			ENABLED_SPELLS.addSpell(TORNADO);
 		}
 	}
 

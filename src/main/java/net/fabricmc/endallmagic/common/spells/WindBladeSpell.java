@@ -32,7 +32,7 @@ public class WindBladeSpell extends Spell {
     @Override
     public <T extends LivingEntity & MagicUser> void attemptCast(T entity, World world) {
         Vec3d rotation = entity.getRotationVec(1F);
-        rotation.normalize().multiply(4.5F);
+        rotation.normalize().multiply(3.5F);
         WindBladeEntity windBlade = new WindBladeEntity(entity, world,damage);
         windBlade.setVelocity(entity,entity.getPitch(),entity.getYaw(), entity.getRoll(), 4.5F, 0F);
 

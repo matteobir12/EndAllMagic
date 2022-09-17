@@ -56,8 +56,8 @@ public class EndAllMagicConfig implements ConfigData {
 		@Comment("Should the fire resist spell be enabled? (Restart Required)")
 		public boolean enableFireResistSpell = true;
 
-		@Comment("Should Arcane Barrier be enabled? (Restart Required)")
-		public boolean enableArcaneBarrier = true;
+		@Comment("Should tornado be enabled? (Restart Required)")
+		public boolean enableTornado = true;
 
 		@Comment("The Mana costs for all the spells.")
 		@ConfigEntry.Gui.CollapsibleObject
