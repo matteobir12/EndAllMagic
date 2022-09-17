@@ -50,6 +50,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Unique private boolean mitigateFireDamage=false;
 	@Unique private Map<Spell,OnTick> onTicks = new HashMap<>();
 	@Unique private final List<Entity> hasHit = new ArrayList<>();
+	@Unique private int channelSpellTimer = 0;
+	@Unique private OnTick channeledSpell;
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
@@ -73,7 +75,17 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 
 			if(spellTimer-- <= 0)
 				spellTimer = 0;
-
+			
+			if(channelSpellTimer > 0){
+				channelSpellTimer--;
+				if (channelSpellTimer == 0){
+					if (channeledSpell!=null) channeledSpell.tick();
+					channeledSpell = null;
+				} else if (channelSpellTimer+1 % 10 == 0){
+					sendMessage(Text.translatable("spell." + EndAllMagic.MOD_ID + ".channel_timer_remaining").append(": "+(channelSpellTimer/20)),true);
+				}
+			}
+			
 			if(world.getTime() >= lastCastTime + 20) {
 				int manaCooldown = getManaRegenTimer();
 
@@ -232,12 +244,21 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		
 	}
 	@Override
-	public boolean onTickEnabled(Spell s) {
+	public boolean onTickContains(Spell s) {
 		return onTicks.containsKey(s);
 	}
 	@Override
 	public void toggleManaFireRes() {
 		mitigateFireDamage = !mitigateFireDamage;
 	}
+
+	@Override
+	public void channelSpell(int timer, OnTick spell) {
+		channelSpellTimer = timer;
+		channeledSpell = spell;
+
+		
+	}
+
 
 }

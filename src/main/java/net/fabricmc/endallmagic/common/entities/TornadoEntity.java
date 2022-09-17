@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Maps;
 import net.fabricmc.endallmagic.EndAllMagic;
+import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.ModDamageSource;
 import net.fabricmc.endallmagic.common.particles.ModParticles;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -28,6 +29,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -35,8 +38,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+// review with server and client in mind
 public class TornadoEntity extends Entity {
-
+    
 	private static final TrackedData<ItemStack> ITEM = DataTracker.registerData(TornadoEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
 
 	@Nullable
@@ -104,6 +108,26 @@ public class TornadoEntity extends Entity {
 	@Override
     public void tick() {
         super.tick();
+        if (isAlive()&&world.getTime()%5==0 && owner instanceof MagicUser){
+            MagicUser user = ((MagicUser)owner);
+            PlayerEntity player = owner instanceof PlayerEntity ? (PlayerEntity)owner:null;
+            boolean isCreative = player!=null && player.isCreative();
+            if(isCreative || (user.getCurrentMana() > 0) || (user.getCurrentMana() >= 1)) {
+                if(!isCreative) {
+                    user.setLastCastTime(player.world.getTime());
+
+                    if(user.getCurrentMana() < 1) {
+                        // player.damage(ModDamageSource.MAGIC_BURNOUT, burnoutAmount); // damage if over
+                        EndAllMagic.LOGGER.info("not enough mana");
+                    }
+
+                    user.addMana(-1);
+                }
+            }else{
+                if (player != null)player.sendMessage(Text.translatable("error." + EndAllMagic.MOD_ID + ".not_enough_mana").formatted(Formatting.RED), false);
+                discard();
+            }
+        }
         Vec3d velocityVec = this.getVelocity();
         if (this.prevPitch == 0.0f && this.prevYaw == 0.0f) {
             double d = velocityVec.horizontalLength();
@@ -173,7 +197,7 @@ public class TornadoEntity extends Entity {
 			}
 		}
 
-		if(age > 40)
+		if(age > 400)
 			kill();
 
     }

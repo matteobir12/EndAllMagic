@@ -2,7 +2,6 @@ package net.fabricmc.endallmagic.common.spells;
 
 import java.util.Arrays;
 
-import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.common.MagicUser;
 import net.fabricmc.endallmagic.common.entities.TornadoEntity;
 import net.fabricmc.endallmagic.common.sounds.ModSoundEvents;
@@ -31,12 +30,17 @@ public class Tornado extends Spell {
         this.manaCost = manaCost;
         this.damage = damage;
     }
+    @Override
     public <T extends LivingEntity & MagicUser> void attemptCast(T entity, World world) {
-        Vec3d rotation = entity.getRotationVec(1F);
-        rotation = rotation.normalize().multiply(.5F);
-        TornadoEntity tornado = new TornadoEntity(entity,world,damage);
-        tornado.setVelocity(rotation.x,rotation.y,rotation.z);
-        world.spawnEntity(tornado);
-        world.playSound(null, entity.getBlockPos(), ModSoundEvents.WIND_BLADE, SoundCategory.PLAYERS, 2F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+        entity.channelSpell(40, () -> {
+            Vec3d rotation = entity.getRotationVec(1F);
+            rotation = rotation.normalize().multiply(.5F);
+            TornadoEntity tornado = new TornadoEntity(entity,world,damage);
+            tornado.setVelocity(rotation.x,rotation.y,rotation.z);
+            world.spawnEntity(tornado);
+            world.playSound(null, entity.getBlockPos(), ModSoundEvents.WIND_BLADE, SoundCategory.PLAYERS, 2F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+            return false;
+        });
+        
     }
 }

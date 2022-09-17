@@ -45,7 +45,7 @@ public interface MagicUser {
 
 	void removeOnTick(Spell s);
 
-	boolean onTickEnabled(Spell s);
+	boolean onTickContains(Spell s);
 
 	interface OnTick {
 		// true if it should be removed
@@ -53,5 +53,7 @@ public interface MagicUser {
     }
 
 	void toggleManaFireRes();
+	
+	void channelSpell(int timer, OnTick spell);
 
 }

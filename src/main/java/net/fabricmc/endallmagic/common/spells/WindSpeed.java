@@ -33,7 +33,7 @@ public class WindSpeed extends Spell {
     }
     @Override
     public <T extends LivingEntity & MagicUser> void attemptCast(T entity, World world) {
-        if (!entity.onTickEnabled(this)){
+        if (!entity.onTickContains(this)){
             long startTime = world.getTime() % 80;
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 80, speedLevel));
             entity.setMana(entity.getCurrentMana()-manaCostPerTick);
