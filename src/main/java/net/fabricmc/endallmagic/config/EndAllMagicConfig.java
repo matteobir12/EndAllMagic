@@ -59,6 +59,9 @@ public class EndAllMagicConfig implements ConfigData {
 		@Comment("Should tornado be enabled? (Restart Required)")
 		public boolean enableTornado = true;
 
+		@Comment("Should rock wall be enabled? (Restart Required)")
+		public boolean enableRockWall = true;
+
 		@Comment("The Mana costs for all the spells.")
 		@ConfigEntry.Gui.CollapsibleObject
 		public ManaCosts manaCosts = new ManaCosts();

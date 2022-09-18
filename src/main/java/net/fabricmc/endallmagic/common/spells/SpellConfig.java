@@ -23,6 +23,7 @@ public class SpellConfig {
 	public static final Spell WINDSPEED;
 	public static final Spell FIRERESIST;
 	public static final Spell TORNADO;
+	public static final Spell ROCKWALL;
 
     public enum Affinity {
 		FIRE {
@@ -74,6 +75,7 @@ public class SpellConfig {
 		WINDSPEED = new WindSpeed();
 		FIRERESIST = new FireResistSpell();
 		TORNADO = new Tornado();
+		ROCKWALL = new RockWall();
     }
 
     public static void register() {
@@ -101,6 +103,10 @@ public class SpellConfig {
 			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "tornado"), TORNADO);
 			ENABLED_SPELLS.addSpell(TORNADO);
 		}
+		// if(EndAllMagic.getConfig().spells.enableRockWall){
+		// 	Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "rock_wall"), ROCKWALL);
+		// 	ENABLED_SPELLS.addSpell(ROCKWALL);
+		// }
 	}
 
 }

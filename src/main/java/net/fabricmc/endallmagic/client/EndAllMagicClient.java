@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.endallmagic.EndAllMagic;
 import net.fabricmc.endallmagic.api.client.PageRegistry;
+import net.fabricmc.endallmagic.client.entities.RockWallEntityRenderer;
 import net.fabricmc.endallmagic.client.entities.TornadoEntityRenderer;
 import net.fabricmc.endallmagic.client.entities.WindBladeEntityRenderer;
 import net.fabricmc.endallmagic.client.gui.EventFactoryClient;
@@ -68,5 +69,6 @@ public class EndAllMagicClient implements ClientModInitializer {
 	public void entityRendererRegistry() {
 		EntityRendererRegistry.register(ModEntities.WIND_BLADE_ENTITY, WindBladeEntityRenderer::new);
 		EntityRendererRegistry.register(ModEntities.TORNADO_ENTITY, TornadoEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.ROCK_WALL_ENTITY, RockWallEntityRenderer::new);
 	}
 }

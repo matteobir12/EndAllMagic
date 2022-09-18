@@ -28,6 +28,12 @@ public class ModEntities {
 					.dimensions(EntityDimensions.fixed(2F, 6F))
 					.trackRangeChunks(64)
 					.build());
+	public static final EntityType<RockWallEntity> ROCK_WALL_ENTITY = create("rock_wall",
+					FabricEntityTypeBuilder.<RockWallEntity>create(SpawnGroup.MISC, RockWallEntity::new)
+							.dimensions(EntityDimensions.fixed(2F, 6F))
+							.trackRangeChunks(64)
+							.build());
+							
 					
 	//-----Registry-----//
 	public static void register() {
