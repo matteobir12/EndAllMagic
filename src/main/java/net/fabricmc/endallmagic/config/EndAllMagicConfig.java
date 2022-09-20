@@ -62,6 +62,12 @@ public class EndAllMagicConfig implements ConfigData {
 		@Comment("Should rock wall be enabled? (Restart Required)")
 		public boolean enableRockWall = true;
 
+		@Comment("Should stone plating be enabled? (Restart Required)")
+		public boolean enableStonePlating = true;
+
+		@Comment("Should wind dash be enabled? (Restart Required)")
+		public boolean 	enableWindDash = true;
+		
 		@Comment("The Mana costs for all the spells.")
 		@ConfigEntry.Gui.CollapsibleObject
 		public ManaCosts manaCosts = new ManaCosts();

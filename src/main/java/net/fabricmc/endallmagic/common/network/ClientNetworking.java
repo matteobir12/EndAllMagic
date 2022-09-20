@@ -56,4 +56,18 @@ public class ClientNetworking {
 		});
 
 	}
+	public static void receiveWindDashToggle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender){
+		client.execute(()->{
+			if(client.player != null){
+				((MagicUser)client.player).toggleWindDash();
+			}
+		});
+
+	}
+	public static void sendWindDashDirection(final int dir) {
+		PacketByteBuf buf = PacketByteBufs.create();
+		buf.writeInt(dir);
+		
+		ClientPlayNetworking.send(ServerNetworking.WINDDASHDIRECTION, buf);
+	}
 }

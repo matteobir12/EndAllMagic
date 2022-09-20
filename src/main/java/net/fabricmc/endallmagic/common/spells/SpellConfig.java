@@ -24,6 +24,8 @@ public class SpellConfig {
 	public static final Spell FIRERESIST;
 	public static final Spell TORNADO;
 	public static final Spell ROCKWALL;
+	public static final Spell STONEPLATING;
+	public static final Spell WINDDASH;
 
     public enum Affinity {
 		FIRE {
@@ -76,6 +78,9 @@ public class SpellConfig {
 		FIRERESIST = new FireResistSpell();
 		TORNADO = new Tornado();
 		ROCKWALL = new RockWall();
+		STONEPLATING = new StonePlating();
+		WINDDASH = new WindDash();
+
     }
 
     public static void register() {
@@ -107,6 +112,14 @@ public class SpellConfig {
 		// 	Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "rock_wall"), ROCKWALL);
 		// 	ENABLED_SPELLS.addSpell(ROCKWALL);
 		// }
+		if(EndAllMagic.getConfig().spells.enableStonePlating){
+			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "stone_plating"), STONEPLATING);
+			ENABLED_SPELLS.addSpell(STONEPLATING);
+		}
+		if(EndAllMagic.getConfig().spells.enableWindDash){
+			Registry.register(EndAllMagic.SPELL, new Identifier(EndAllMagic.MOD_ID, "wind_dash"), WINDDASH);
+			ENABLED_SPELLS.addSpell(WINDDASH);
+		}
 	}
 
 }

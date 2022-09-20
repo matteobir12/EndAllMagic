@@ -47,6 +47,7 @@ public class EndAllMagicClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		// ClientLoginNetworking.registerGlobalReceiver(NetworkFactory.CONFIG, NetworkFactoryClient::loginQueryReceived); when client logs in recieves config data from server
 		ClientPlayNetworking.registerGlobalReceiver(ServerNetworking.ADDSPELL, ClientNetworking::receiveKnownSpell);
+		ClientPlayNetworking.registerGlobalReceiver(ServerNetworking.WINDDASHTOGGLE, ClientNetworking::receiveWindDashToggle);
 		
 		keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("endallmagic.key.screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.inventory"));
 		HandledScreens.register(EndAllMagic.MAGIC_SCREEN, MagicScreen::new);

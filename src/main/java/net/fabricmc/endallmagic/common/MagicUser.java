@@ -56,4 +56,10 @@ public interface MagicUser {
 	
 	void channelSpell(int timer, OnTick spell);
 
+	void toggleWindDash();
+
+	boolean getWindDash();
+
+	void windDashDirection(int direction);
+
 }

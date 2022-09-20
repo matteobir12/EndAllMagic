@@ -54,6 +54,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	@Unique private final List<Entity> hasHit = new ArrayList<>();
 	@Unique private int channelSpellTimer = 0;
 	@Unique private OnTick channeledSpell;
+	@Unique private boolean windDashEnable = false;
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
@@ -269,5 +270,44 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		channeledSpell = null;
 	}
 
+	@Override
+	public void toggleWindDash() {
+		EndAllMagic.LOGGER.info("toggling " + world.isClient());
+		windDashEnable = !windDashEnable;
+		if (!world.isClient) ServerNetworking.sendWindDashToggle(this);
+	}
+	@Override
+	public void windDashDirection(int direction) {
+		Vec3d rotation = getRotationVec(1F);
+		Vec3d rotat = new Vec3d(rotation.x, 0, rotation.z);
+		rotat = rotat.normalize().multiply(3.5F);
+		switch (direction) {
+			case 0:
+				addVelocity(rotat.x, 0, rotat.z);
+			break;
+			case 1:
+				addVelocity(-rotat.x, 0, -rotat.z);
+			break;
+			case 2:
+				addVelocity(-rotat.z, 0, rotat.x);
+			break;
+			case 3:
+				addVelocity(rotat.z, 0, -rotat.x);
+			break;
+			case 4:
+				addVelocity(0, 3.5, 0);
+			break;
+			case 5:
+			break;
+			default:
+				EndAllMagic.LOGGER.info("got " + direction);
 
+		}
+
+	}
+
+	@Override
+	public boolean getWindDash() {
+		return windDashEnable;
+	}
 }

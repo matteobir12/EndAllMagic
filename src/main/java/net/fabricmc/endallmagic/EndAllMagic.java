@@ -59,6 +59,7 @@ public class EndAllMagic implements ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.ID, ServerNetworking::castSpellReceive);
 		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.SCREEN, ServerNetworking::switchScreen);
 		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.AFFINITY, ServerNetworking::updateAffinityReceive);
+		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.WINDDASHDIRECTION, ServerNetworking::reciveWindDashDirection);
 
 		SpellConfig.register();
 		ModSoundEvents.register();

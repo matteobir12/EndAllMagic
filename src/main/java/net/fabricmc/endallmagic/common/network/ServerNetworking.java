@@ -22,6 +22,8 @@ public class ServerNetworking {
 	public static final Identifier SCREEN = new Identifier(EndAllMagic.MOD_ID, "screen");
 	public static final Identifier AFFINITY = new Identifier(EndAllMagic.MOD_ID, "affinity");
 	public static final Identifier ADDSPELL = new Identifier(EndAllMagic.MOD_ID, "add_spell");
+	public static final Identifier WINDDASHTOGGLE = new Identifier(EndAllMagic.MOD_ID, "wind_bladet");
+	public static final Identifier WINDDASHDIRECTION = new Identifier(EndAllMagic.MOD_ID, "wind_bladed");
 	
 
 	public static void castSpellReceive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler network, PacketByteBuf buf, PacketSender sender) {
@@ -78,12 +80,28 @@ public class ServerNetworking {
 			user.setAffinity(affinity);
 		});
 	}
+
 	public static<T extends LivingEntity & MagicUser> void sendKnownSpell(T player,Spell spell){
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 		buf.writeVarInt(EndAllMagic.SPELL.getRawId(spell));
 		ServerPlayNetworking.send((ServerPlayerEntity)player, ADDSPELL, buf);
 	}
 
+	public static<T extends LivingEntity & MagicUser> void sendWindDashToggle(T player){
+		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+		ServerPlayNetworking.send((ServerPlayerEntity)player, WINDDASHTOGGLE, buf);
+	}
+
+	public static void reciveWindDashDirection(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+		int direction = buf.readInt();
+		
+		server.execute(() -> {
+			if(player != null) {
+				EndAllMagic.LOGGER.info("got " + direction);
+				((MagicUser)player).windDashDirection(direction);
+			}
+		});
+	}
 
 
 
