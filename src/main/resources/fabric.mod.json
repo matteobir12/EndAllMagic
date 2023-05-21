@@ -18,6 +18,9 @@
 
   "environment": "*",
   "entrypoints": {
+    "fabric-datagen": [
+      "DataGeneration"
+    ],
     "main": [
       "net.fabricmc.endallmagic.EndAllMagic"
     ],

@@ -91,18 +91,4 @@ public class ServerNetworking {
 		PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 		ServerPlayNetworking.send((ServerPlayerEntity)player, WINDDASHTOGGLE, buf);
 	}
-
-	public static void reciveWindDashDirection(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-		int direction = buf.readInt();
-		
-		server.execute(() -> {
-			if(player != null) {
-				EndAllMagic.LOGGER.info("got " + direction);
-				((MagicUser)player).windDashDirection(direction);
-			}
-		});
-	}
-
-
-
 }

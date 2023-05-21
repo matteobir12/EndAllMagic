@@ -59,7 +59,6 @@ public class EndAllMagic implements ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.ID, ServerNetworking::castSpellReceive);
 		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.SCREEN, ServerNetworking::switchScreen);
 		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.AFFINITY, ServerNetworking::updateAffinityReceive);
-		ServerPlayNetworking.registerGlobalReceiver(ServerNetworking.WINDDASHDIRECTION, ServerNetworking::reciveWindDashDirection);
 
 		SpellConfig.register();
 		ModSoundEvents.register();
@@ -68,7 +67,7 @@ public class EndAllMagic implements ModInitializer {
 		ModEntities.register();
 		commonEvents();
 
-		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), EntityAttributes.MANA_REGEN);
+		Registry.register(Registry.ATTRIBUTE, new Identifier(MOD_ID, "mana_regen"), MagicEntityAttributes.MANA_REGEN);
 			
 	}
 
@@ -77,13 +76,22 @@ public class EndAllMagic implements ModInitializer {
 		public static final TrackedData<Integer> LEVEL = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
 		public static final TrackedData<Integer> AFFINITY = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
 		public static final TrackedData<Boolean> SHOW_MANA = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+		public static final TrackedData<Integer> EARTH_EXP = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
+		public static final TrackedData<Integer> FIRE_EXP = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
+		public static final TrackedData<Integer> WIND_EXP = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
+		public static final TrackedData<Integer> WATER_EXP = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
 		private DataTrackers(){}
 	}
 
-	public static class EntityAttributes {
+	public static class MagicEntityAttributes {
 		public static final EntityAttribute MANA_COST = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".mana_cost", 1D, 0D, 1024D).setTracked(true);
 		public static final EntityAttribute MANA_REGEN = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".mana_regen", 1D, 0D, 1024D).setTracked(true);
-		private EntityAttributes(){}
+		// public static final EntityAttribute EARTH_EXP = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".earth_exp", 0D, 0D, 8192D).setTracked(true);
+		// public static final EntityAttribute FIRE_EXP = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".fire_exp", 0D, 0D, 8192D).setTracked(true);
+		// public static final EntityAttribute WIND_EXP = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".fire_exp", 0D, 0D, 8192D).setTracked(true);
+		// public static final EntityAttribute WATER_EXP = new ClampedEntityAttribute("attribute.name.generic." + MOD_ID + ".water_exp", 0D, 0D, 8192D).setTracked(true);
+
+		private MagicEntityAttributes(){}
 	}
 
 	public static EndAllMagicConfig getConfig() {

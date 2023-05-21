@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.fabricmc.endallmagic.EndAllMagic.DataTrackers.*;
-import static net.fabricmc.endallmagic.EndAllMagic.EntityAttributes.*;
+import static net.fabricmc.endallmagic.EndAllMagic.MagicEntityAttributes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,6 +121,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		int lvl = rootTag.getInt("Level");
 		dataTracker.set(LEVEL, lvl > 0? lvl :1);
 		dataTracker.set(AFFINITY, rootTag.getInt("Affinity"));
+		dataTracker.set(EARTH_EXP, rootTag.getInt("EarthExp"));
+		dataTracker.set(FIRE_EXP, rootTag.getInt("FireExp"));
+		dataTracker.set(WIND_EXP, rootTag.getInt("WindExp"));
+		dataTracker.set(WATER_EXP, rootTag.getInt("WaterExp"));
 		activeSpell = EndAllMagic.SPELL.get(new Identifier(rootTag.getString("ActiveSpell")));
 		lastCastTime = rootTag.getLong("LastCastTime");
 		spellTimer = rootTag.getInt("SpellTimer");
@@ -138,6 +142,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		rootTag.putInt("Level", dataTracker.get(LEVEL));
 		rootTag.putInt("Affinity", dataTracker.get(AFFINITY));
 		rootTag.putBoolean("ShowMana", dataTracker.get(SHOW_MANA));
+		rootTag.putInt("EarthExp", dataTracker.get(EARTH_EXP));
+		rootTag.putInt("FireExp", dataTracker.get(FIRE_EXP));
+		rootTag.putInt("WindExp", dataTracker.get(WIND_EXP));
+		rootTag.putInt("WaterExp", dataTracker.get(WATER_EXP));
 		rootTag.putString("ActiveSpell", activeSpell != null ? EndAllMagic.SPELL.getId(activeSpell).toString() : "");
 		rootTag.putLong("LastCastTime", lastCastTime);
 		rootTag.putInt("SpellTimer", spellTimer);
@@ -149,6 +157,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 		dataTracker.startTracking(MANA, getMaxMana());
 		dataTracker.startTracking(SHOW_MANA, false);
 		dataTracker.startTracking(AFFINITY, SpellConfig.Affinity.NONE.ordinal());
+		dataTracker.startTracking(EARTH_EXP, 0);
+		dataTracker.startTracking(FIRE_EXP, 0);
+		dataTracker.startTracking(WIND_EXP, 0);
+		dataTracker.startTracking(WATER_EXP, 0);
 		
 	}
 
@@ -280,9 +292,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 	public void windDashDirection(int direction) {
 		Vec3d rotation = getRotationVec(1F);
 		Vec3d rotat = new Vec3d(rotation.x, 0, rotation.z);
-		rotat = rotat.normalize().multiply(3.5F);
+		rotat = rotat.normalize().multiply(0.5F);
+		velocityModified = true;
 		switch (direction) {
 			case 0:
+				EndAllMagic.LOGGER.info("dashing straight");
 				addVelocity(rotat.x, 0, rotat.z);
 			break;
 			case 1:
@@ -295,7 +309,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements MagicUse
 				addVelocity(rotat.z, 0, -rotat.x);
 			break;
 			case 4:
-				addVelocity(0, 3.5, 0);
+				addVelocity(0, 0.5, 0);
 			break;
 			case 5:
 			break;
