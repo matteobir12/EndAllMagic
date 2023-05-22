@@ -64,4 +64,10 @@ public class ClientNetworking {
 		});
 
 	}
+	public static void sendWindDashDirection(final int dir) {
+		PacketByteBuf buf = PacketByteBufs.create();
+		buf.writeInt(dir);
+		
+		ClientPlayNetworking.send(ServerNetworking.WINDDASHDIRECTION, buf);
+	}
 }
