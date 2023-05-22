@@ -1,7 +1,5 @@
 accessWidener v1 named
 
-accessible method net/minecraft/block/TntBlock primeTnt (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/LivingEntity;)V
-
 accessible method net/minecraft/block/FallingBlock configureFallingBlockEntity (Lnet/minecraft/entity/FallingBlockEntity;)V
 
 accessible method net/minecraft/entity/projectile/PersistentProjectileEntity fall ()V

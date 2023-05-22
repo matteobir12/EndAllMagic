@@ -79,15 +79,16 @@ public class ClientMixin implements ClientUtils {
 			spellTimer--;
 		
 		if (dashTimer > 0)
-				dashTimer--;
+			dashTimer--;
 		if (((MagicUser)player).getWindDash()){
 			MinecraftClient client = MinecraftClient.getInstance();
 			List<Boolean> f = Arrays.asList(client.options.forwardKey.isPressed(),client.options.backKey.isPressed(),client.options.leftKey.isPressed(),client.options.rightKey.isPressed(),client.options.jumpKey.isPressed());
 			for (int i=0;i<f.size(); i++){
 				if (Boolean.TRUE.equals(f.get(i))) {
-					if (dashTimer < 15 && dashTimer > 0 && i==lastKeyPressed) {
-						ClientNetworking.sendWindDashDirection(i);
-						EndAllMagic.LOGGER.info("dashing " + i);
+					if (dashTimer < 14 && dashTimer > 0 && i==lastKeyPressed) {
+						((MagicUser)player).windDashDirection(i);
+						lastKeyPressed = -1;
+						dashTimer = 0;
 					}else {
 						lastKeyPressed = i;
 					}
